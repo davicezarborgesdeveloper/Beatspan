@@ -1,0 +1,112 @@
+[
+  {
+    "title": "FAQ SOBRE O JOGO",
+    "session": [
+      {
+        "title": "COMO EU TOCO AS MÚSICAS?",
+        "content": "As músicas são reproduzidas automaticamente quando você escaneia o QR code de uma carta HITSTER utilizando o celular com o app gratuito HITSTER instalado. Ao abrir o app, siga as instruções na tela para conectar ao app do Spotify ou escolha jogar utilizando o Spotify Free.\n\nO Spotify Premium te dará a melhor experiência com HITSTER. A versão Free pode ter algumas limitações."
+      },
+      {
+        "title": "QUAIS MÚSICAS ESTÃO NO HITSTER?",
+        "content": "HITSTER contém mais de 300 músicas de sucesso reconhecíveis em diferentes gêneros, lançadas entre 1908 e 2021. Não se preocupe se você não for um especialista. Qualquer um que jogue HITSTER tem uma chance de ganhar."
+      },
+      {
+        "title": "QUAL É A DIFERENÇA ENTRE AS QUATRO FORMAS DE JOGAR HITSTER?",
+        "content": "HITSTER pode ser jogado competitivamente (usando três níveis de dificuldade: ORIGINAL, PROFISSIONAL e ESPECIALISTA) ou com todos os jogadores do mesmo lado usando o modo COOPERATIVO. Recomendamos que você comece a jogar HITSTER usando as regras ORIGINAIS. Se você achar muito fácil, passe para PROFISSIONAL e depois ESPECIALISTA. Leia as regras do jogo para mais detalhes."
+      },
+      {
+        "title": "POSSO BAIXAR A PLAYLIST DE HITSTER?",
+        "content": "Sim. Clique no link abaixo ou escaneie o código Spotify com seu celular a partir do app Spotify. Faça isso tocando no ícone de pesquisa e, em seguida, no ícone de câmera na parte superior da tela.\n\nHitster Original:\n[](https://open.spotify.com/playlist/4gW0C5yxuyq5ZbFqjpIg8S?si=8aY1lUa-STySFM93J8DTFw)"
+      },
+      {
+        "title": "POSSO JOGAR HITSTER SEM O JOGO DE CARTAS?",
+        "content": "Não. Você precisa das cartas Hitster para conseguir jogar. Para mais informações, consulte a página Onde comprar."
+      },
+      {
+        "title": "ALGUMAS DAS MINHAS CARTAS HITSTER CONTÉM SÍMBOLOS. O QUE ELES SIGNIFICAM?",
+        "content": "As cartas podem ser marcadas com um símbolo para identificar a versão do jogo correspondente. Caso elas sejam misturadas durante a partida, cada carta pode sempre ser guardada em sua respectiva caixa."
+      },
+      {
+        "title": "MEU CELULAR É COMPATÍVEL?",
+        "content": "O app HITSTER funciona com os iPHone 7 ou posterior com iOS 14.8.1 ou posterior instalado, ou com um celular Android que rode 7.0 Nougat ou posterior. Todos os celulares devem ter uma câmera traseira funcionando, autofalantes e acesso à internet."
+      },
+      {
+        "title": "POSSO USAR UM TABLET?",
+        "content": "Sim e não. Oficialmente, o suporte é apenas para celulares. No entanto, alguns dispositivos permite que aplicativos de celular sejam instalados num tablet. Você pode tentar, mas pode não funcionar como o pretendido."
+      },
+      {
+        "title": "POSSO USAR UM DISPOSITIVO EXTERNO OU AUTOFALANTE PARA REPRODUÇÃO?",
+        "content": "Sim e não. Um autofalante compatível com Bluethooth ou Airplay deve funcionar. Conexão com um google Chromecast ou AppleTV não é compatível, já que apresenta problemas na reprodução de áudio. Fique à vontade para testar e verificar se funciona para você."
+      },
+      {
+        "title": "EU PRECISO DE CONEXÃO COM A INTERNET?",
+        "content": "HITSTER usa uma base de dados online para conectar com o Spotify. Ter essa base de dados garante que HITSTER funcione conforme o pretendido. Sem essa conexão, não podemos lidar com quaisquer mudanças que Spotify possa fazer em sua plataforma.\n\nTenha certeza de usar uma conexão Wi-FI segura para evitar cobranças adicionais de sua operadora."
+      },
+      {
+        "title": "EU PRECISO DE UMA CONTA SPOTIFY?",
+        "content": "Sim e não. Você pode jogar HITSTER sem uma conta Spotify. No entanto, isso não dará a você a melhor experiência, já que você será limitado a apenas 20 segundos em cada uma das músicas executadas. Spotify oferece um teste Premium gratuito quando você se cadastra para uma conta Spotify.\n\nVeja:[](https://www.spotify.com/br-pt/premium/)"
+      },
+      {
+        "title": "NÃO CONSIGO ME CONECTAR À SPOTIFY",
+        "content": "Por favor, entre em contato com o suporte Spotify. Não conseguimos ajudar com isso.\n\nAcesse: [](https://support.spotify.com/br-pt/)"
+      },
+      {
+        "title": "POSSO USAR YOUTUBE MUSIC, APPLE MUSIC, DEEZE OU QUALQUER OUTRO SERVIÇO DE STREAMING DE MÚSICA?",
+        "content": "Sim, você pode. Nesse caso, no entanto, um jogador precisa buscar manualmente pela música na carta no serviço de streaming de música de sua preferência em vez de escanear a carta com o app HITSTER. Você pode escolher um jogador com o DJ por todo o jogo OU se revezar para tocar as músicas ao passar o dispositivo para o próximo jogador a cada turno."
+      },
+      {
+        "title": "TENHO OUTRA PERGUNTA",
+        "content": "Você pode entrar em contato conosco por meio de nosso [formulário online](@contact). Após receber o e-mail de confirmação, pode levar até 10 dias úteis para que sua pergunta seja respondida."
+      }
+    ]
+  },
+  {
+    "title": "FAQ SOBRE APP HITSTER",
+    "session": [
+      {
+        "title": "POR QUE O HITSTER PRECISA DE ACESSO À CÂMERA?",
+        "content": "É necessária uma câmera para escanear o código QR no verso de uma carta HITSTER. Sem isso, o jogo não funcionará."
+      },
+      {
+        "title": "MINHA CÂMERA NÃO FUNCIONA DENTRO DO APP HITSTER",
+        "content": "Na maioria dos dispositivos, é possível desativar o acesso à câmera para o seu dispositivo. Exclua e reinstale o aplicativo HITSTER da App Store ou Google Play. O aplicativo pedirá sua permissão para acessar sua câmera."
+      },
+      {
+        "title": "MEU TELEFONE NÃO CONSEGUE ESCANEAR O CÓDIGO QR NA CARTA",
+        "content": "Certifique-se de que a carta não esteja danificada de forma alguma e que haja luz suficiente para a câmera ver o código na carta. Evite reflexos intensos, pois eles podem impedir que a câmera veja o código QR. Você pode bloqueá-los colocando sua mão entre a fonte de luz e o cartão sem cobrir o código QR."
+      },
+      {
+        "title": "ESCANEAR UMA CARTA PRODUZ UMA TELA PRETA",
+        "content": "Verifique se você possui uma conexão Wi-Fi. Se você estiver em uma rede móvel, certifique-se de que o aplicativo HITSTER tenha permissão para usar seus dados de celular*.\n\nUsuários do iPhone, consultem: [](https://support.apple.com/pt-br/guide/iphone/iph3dd5f213/ios)\nUsuários do Android, consultem: [](https://support.google.com/fi/answer/9458407)\n\n* O uso de dados de celular pode levar a cobranças adicionais de sua operadora."
+      },
+      {
+        "title": "O APP HITSTER REPRODUZ MÚSICAS INCORRETAS",
+        "content": "Verifique se você está em um plano pago Spotify Premium (Premium Individual, Premium Student, Premium Duo ou Premium Family) e se você está conectado ao app Spotify com sua conta.\n\nVisite spotify.com e faça login para ver os detalhes do seu plano.\n\nSe você estiver em um plano Spotify Free e o app HITSTER estiver definido como Premium, o Spotify reproduzirá músicas incorretas. Para corrigir isso:\n\n1. Abra o app HITSTER.\n2. Clique no ícone de configurações (canto superior direito) no menu principal.\n3. Verifique se o modo Spotify está definido como Premium.\n4. Clique no botão “Alterar modo Spotify” e selecione “Spotify Free”.\n5. Feche a tela de configurações pressionando o ícone de fechamento no canto superior direito.\n\nAgora você está pronto para jogar HITSTER. Observe que, com o Spotify Free, a reprodução das músicas é limitada a 20 segundos e um jogador deverá atuar como DJ. Leia as regras – acessíveis a partir do menu principal – para obter mais detalhes."
+      },
+      {
+        "title": "UMA DE MINHAS CARTAS HITSTER NÃO ESTÁ TOCANDO UMA MÚSICA",
+        "content": "Há duas razões pelas quais isso pode acontecer:\n\n1.Você comprou (ou ganhou de presente) um jogo HITSTER destinado a outro mercado ou está viajando para o exterior com seu jogo HITSTER. Nesse caso, algumas cartas não funcionarão devido à forma como o Spotify gerencia os direitos das músicas. Ao retornar de sua viagem, suas cartas devem funcionar como antes.\n2.A empresa que detém os direitos musicais removeu a música do Spotify ou moveu a música para outro álbum ou lista de reprodução.\n\nEm alguns casos, podemos corrigir o problema. Nos informe quais cartas não estão funcionando – e se você estava viajando no momento – usando este formulário HITSTER."
+      },
+      {
+        "title": "O APP HITSTER CONTINUA SE DESCONECTANDO DO SPOTIFY",
+        "content": "Alguns celulares da Apple têm problemas para manter uma conexão estável entre o app HITSTER e sua conta Spotify Premium. Estamos trabalhando em uma correção, pois sabemos que isso é muito inconveniente. Recomendamos usar o modo Spotify Free nesses casos para ainda poder jogar sem interrupções. Certifique-se de revisar as regras específicas do jogo para usuários do Spotify Free.\nEm outros casos, os problemas de conexão podem ser evitados não desligando a tela do telefone entre as músicas ou não colocando o telefone com a tela voltada para baixo na mesa ou em qualquer outra superfície plana, pois isso também bloqueia alguns telefones."
+      },
+      {
+        "title": "MEU APLICATIVO ESTÁ EM UM IDIOMA QUE NÃO CONSIGO LER",
+        "content": "Se isso acontecer, basta excluir e reinstalar o aplicativo HITSTER da App Store ou Google Play. Ele lhe dará a opção de selecionar seu idioma preferido no aplicativo. Não importa o idioma que você seleciona dentro do aplicativo, pois isso não afeta a jogabilidade."
+      },
+      {
+        "title": "DEPOIS DE INSTALAR, QUAIS DADOS O APP HITSTER COLETA?",
+        "content": "O app HITSTER não coleta ou armazena nenhum dado. Se você usa uma conta Spotify Premium, consulte a Política de Privacidade para ver quais dados o Spotify coleta. Nenhuma informação está sendo compartilhada entre o Spotify e nós."
+      },
+      {
+        "title": "POR QUANTO TEMPO O APP HITSTER TERÁ SUPORTE?",
+        "content": "Essa é uma pergunta difícil de responder. Isso depende em parte da Apple, Google e Spotify. O HITSTER foi construído fazendo uso de suas plataformas e não sabemos se alguma mudança futura afetará nosso app. Faremos o nosso melhor para manter o suporte ao HITSTER enquanto estivermos produzindo e vendendo ativamente nossos produtos HITSTER, mas não podemos garantir que o app continuará funcionando para sempre."
+      },
+      {
+        "title": "EU TENHO OUTRA PERGUNTA",
+        "content": "Você pode entrar em contato conosco usando nosso [formulário de contato online](@contact). Depois de receber um e-mail de confirmação, pode levar até 10 dias úteis para responder à sua pergunta."
+      }
+    ]
+  }
+]
