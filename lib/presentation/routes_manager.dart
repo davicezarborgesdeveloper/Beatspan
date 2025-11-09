@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../app/di.dart';
 import 'change_spotify/change_spotify_view.dart';
 import 'connect_spotify_premium/connect_spotify_premium_view.dart';
 import 'contact/contact_view.dart';
@@ -34,6 +35,7 @@ class RouteGenerator {
       case Routes.homeRoute:
         return MaterialPageRoute(builder: (_) => const HomeView());
       case Routes.faqRoute:
+        initFaqsModule();
         return MaterialPageRoute(builder: (_) => const FaqsView());
       case Routes.settingsRoute:
         return MaterialPageRoute(builder: (_) => const SettingsView());
@@ -45,6 +47,7 @@ class RouteGenerator {
           builder: (_) => const ChangeSpotifyView(),
         );
       case Routes.changeSpotifyPremiumRoute:
+        initSpotifyModule();
         return MaterialPageRoute(
           builder: (_) => const ConnectSpotifyPremiumView(),
         );
@@ -57,9 +60,7 @@ class RouteGenerator {
     return MaterialPageRoute(
       builder: (_) => Scaffold(
         appBar: AppBar(title: const Text('Rota Inexistente')),
-        body: const Center(
-          child: Text('Rota Inexistente'),
-        ),
+        body: const Center(child: Text('Rota Inexistente')),
       ),
     );
   }

@@ -3,11 +3,15 @@ import 'package:flutter/services.dart';
 import 'package:spotify_sdk/spotify_sdk.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../app/di.dart';
+import '../../data/network/spotify_service.dart';
+import '../../domain/enum/flow_state.dart';
 import '../resource/color_manager.dart';
 import '../resource/font_manager.dart';
 import '../resource/style_manager.dart';
 import '../resource/value_manager.dart';
 import '../share/widgets/scaffold_hitster.dart';
+import 'connect_spotify_premium_view_model.dart';
 
 class ConnectSpotifyPremiumView extends StatefulWidget {
   const ConnectSpotifyPremiumView({super.key});
@@ -18,6 +22,35 @@ class ConnectSpotifyPremiumView extends StatefulWidget {
 }
 
 class _ConnectSpotifyPremiumViewState extends State<ConnectSpotifyPremiumView> {
+  final _viewModel = ConnectSpotifyPremiumViewModel(instance<SpotifyService>());
+
+  @override
+  void initState() {
+    _bind();
+    _viewModel.state.addListener(() {
+      if (mounted && _viewModel.state.value == FlowState.error) {
+        final message = _viewModel.errorMessage.value ?? 'Erro desconhecido';
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              message,
+              style: getMediumStyle(
+                color: ColorManager.white,
+                fontSize: FontSize.s14,
+              ),
+            ),
+            backgroundColor: ColorManager.warning,
+          ),
+        );
+      }
+    });
+    super.initState();
+  }
+
+  void _bind() {
+    _viewModel.start();
+  }
+
   @override
   Widget build(BuildContext context) {
     return ScaffoldHitster(
@@ -65,28 +98,7 @@ class _ConnectSpotifyPremiumViewState extends State<ConnectSpotifyPremiumView> {
               height: AppSize.s66,
               child: ElevatedButton(
                 onPressed: () async {
-                  try {
-                    await SpotifySdk.connectToSpotifyRemote(
-                      clientId: '8e1f4c38cf5543f5929e19c1d503205c',
-                      redirectUrl: 'https://hitster-d8ac4.firebaseapp.com/',
-                    );
-                  } on PlatformException catch (e) {
-                    switch (e.code) {
-                      case 'CouldNotFindSpotifyApp':
-                        launchUrl(
-                          Uri.parse(
-                            'https://play.google.com/store/apps/details?id=com.spotify.music&hl=pt&gl=US',
-                          ),
-                        );
-                        break;
-                      case 'UserNotAuthorizedException':
-                        break;
-                      default:
-                        Uri.parse(
-                          'https://accounts.spotify.com/pt-BR/v2/login?continue=https%3A%2F%2Fwww.spotify.com%2Fbr-pt%2Faccount%2Foverview%2F',
-                        );
-                    }
-                  }
+                  _viewModel.connect();
                 },
                 child: Text(
                   'Ligar com Spotify',
