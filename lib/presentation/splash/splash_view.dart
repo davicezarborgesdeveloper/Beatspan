@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import '../../app/app_prefs.dart';
 import '../../app/di.dart';
@@ -101,7 +101,10 @@ class _SplashViewState extends State<SplashView> with TickerProviderStateMixin {
             FadeTransition(
               opacity: _opTitle,
               child: SizedBox(
-                height: context.screenWidth - AppPadding.p46,
+                height: math.max(
+                  0.0,
+                  context.screenShortestSide - AppPadding.p46,
+                ),
                 child: Image.asset(ImageAssets.logoIcon),
               ),
             ),

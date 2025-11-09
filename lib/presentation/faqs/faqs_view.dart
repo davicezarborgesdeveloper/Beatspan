@@ -9,7 +9,7 @@ import '../../app/di.dart';
 import '../resource/style_manager.dart';
 import '../resource/value_manager.dart';
 import '../share/widgets/empty_container.dart';
-import 'faqs_viewmodel.dart';
+import 'faqs_view_model.dart';
 import 'widgets/faq_tile.dart';
 
 class FaqsView extends StatefulWidget {
@@ -68,18 +68,20 @@ class _FaqsViewState extends State<FaqsView> {
                 ),
               ),
               ListenableBuilder(
-                listenable:
-                    Listenable.merge([_viewModel.state, _viewModel.faqs]),
+                listenable: Listenable.merge([
+                  _viewModel.state,
+                  _viewModel.faqs,
+                ]),
                 builder: (_, child) => switch (_viewModel.state.value) {
                   FlowState.loading => const Center(
-                      child: CircularProgressIndicator(),
-                    ),
+                    child: CircularProgressIndicator(),
+                  ),
                   FlowState.success => Column(
-                      children: _viewModel.faqs.value!
-                          .map((f) => FaqTile(faq: f))
-                          .toList(),
-                    ),
-                  _ => const EmptyContainer()
+                    children: _viewModel.faqs.value!
+                        .map((f) => FaqTile(faq: f))
+                        .toList(),
+                  ),
+                  _ => const EmptyContainer(),
                 },
               ),
             ],

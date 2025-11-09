@@ -50,8 +50,9 @@ class _ChangeSpotifyViewState extends State<ChangeSpotifyView> {
                 ),
                 const SizedBox(height: AppSize.s20),
                 Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: AppPadding.p16),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppPadding.p16,
+                  ),
                   child: Text(
                     'Escolhe o Spotify Free se não tiveres uma conta Spotify paga. Caso contrário, seleciona o Spotify Premium para obteres a melhor experiência. Visitar Spotify.com para mais informações.',
                     textAlign: TextAlign.center,
@@ -103,15 +104,7 @@ class _ChangeSpotifyViewState extends State<ChangeSpotifyView> {
                   child: ElevatedButton(
                     onPressed: () {
                       final NavigatorState navigator = Navigator.of(context);
-                      _appPreferences.setAppPlanType(PlanType.premium);
                       navigator.pushNamed(Routes.changeSpotifyPremiumRoute);
-
-                      // _appPreferences.setAppPlanType(PlanType.free);
-                      // if (from == Routes.splashRoute) {
-                      //   navigator.pushReplacementNamed(Routes.homeRoute);
-                      // } else {
-                      //   navigator.pop();
-                      // }
                     },
                     child: Text(
                       'Spotify Premium',

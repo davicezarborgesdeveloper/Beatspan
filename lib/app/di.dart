@@ -6,7 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../data/network/network_info.dart';
 import '../domain/usecase/faqs_usecase.dart';
-import '../presentation/faqs/faqs_viewmodel.dart';
+import '../presentation/faqs/faqs_view_model.dart';
 import 'app_prefs.dart';
 
 final instance = GetIt.instance;
@@ -17,10 +17,11 @@ Future<void> initAppModule() async {
   instance.registerLazySingleton<SharedPreferences>(() => sharedPrefs);
 
   // app prefs instance
-  instance
-      .registerLazySingleton<AppPreferences>(() => AppPreferences(instance()));
+  instance.registerLazySingleton<AppPreferences>(
+    () => AppPreferences(instance()),
+  );
 
-// network info
+  // network info
   instance.registerLazySingleton<NetworkInfo>(
     () => NetworkInfoImpl(Connectivity()),
   );

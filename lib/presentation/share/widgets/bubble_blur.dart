@@ -24,10 +24,7 @@ class BubbleBlur extends StatelessWidget {
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           gradient: RadialGradient(
-            colors: [
-              color,
-              color.withOpacity(0.0),
-            ],
+            colors: [color, color.withAlpha(0)],
             stops: const [0.75, 1.0],
           ),
         ),

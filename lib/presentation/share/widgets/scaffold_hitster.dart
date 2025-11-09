@@ -74,7 +74,7 @@ class _ScaffoldHitsterState extends State<ScaffoldHitster> {
           4 => [null, null, 20.0, 64.0],
           _ => 0,
         },
-      }
+      },
     ];
 
     super.initState();
@@ -90,11 +90,7 @@ class _ScaffoldHitsterState extends State<ScaffoldHitster> {
         automaticallyImplyLeading: false,
         backgroundColor: Colors.transparent,
         leading: IconButton(
-          icon: Icon(
-            Icons.help_outline,
-            color: ColorManager.white,
-            size: 42,
-          ),
+          icon: Icon(Icons.help_outline, color: ColorManager.white, size: 42),
           onPressed: () {
             initFaqsModule();
             Navigator.of(context).pushNamed('/faq');
@@ -127,10 +123,7 @@ class _ScaffoldHitsterState extends State<ScaffoldHitster> {
     );
   }
 
-  Widget buildBackground(
-    Color colorFst,
-    Color colorSnd,
-  ) {
+  Widget buildBackground(Color colorFst, Color colorSnd) {
     return Stack(
       children: [
         Container(
@@ -150,7 +143,7 @@ class _ScaffoldHitsterState extends State<ScaffoldHitster> {
             bottom: a['position'][3],
             child: BubbleBlur(
               size: a['size'],
-              color: ColorManager.white.withOpacity(.3),
+              color: ColorManager.white.withAlpha(77),
               blur: 5,
             ),
           ),
