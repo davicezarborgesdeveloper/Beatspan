@@ -53,8 +53,10 @@ class _SplashViewState extends State<SplashView> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     _ctrlTitle = AnimationController(vsync: this, duration: durationTitle);
-    _ctrlSubtitle =
-        AnimationController(vsync: this, duration: durationSubtitle);
+    _ctrlSubtitle = AnimationController(
+      vsync: this,
+      duration: durationSubtitle,
+    );
 
     _opTitle = CurvedAnimation(parent: _ctrlTitle, curve: Curves.easeOut);
     _opSubtitle = CurvedAnimation(parent: _ctrlSubtitle, curve: Curves.easeOut);
@@ -91,9 +93,7 @@ class _SplashViewState extends State<SplashView> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(
-          color: Colors.black,
-        ),
+        decoration: const BoxDecoration(color: Colors.black),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -101,26 +101,19 @@ class _SplashViewState extends State<SplashView> with TickerProviderStateMixin {
             FadeTransition(
               opacity: _opTitle,
               child: SizedBox(
-                width: context.screenWidth - AppPadding.p46,
-                child: Image.asset(
-                  ImageAssets.logoSplash,
-                ),
+                height: context.screenWidth - AppPadding.p46,
+                child: Image.asset(ImageAssets.logoIcon),
               ),
             ),
             FadeTransition(
               opacity: _opSubtitle,
-              child: Column(
-                children: [
-                  const SizedBox(height: AppPadding.p24),
-                  Text(
-                    'The music party game',
-                    textAlign: TextAlign.center,
-                    style: getRegularStyle(
-                      color: ColorManager.white,
-                      fontSize: FontSize.s20,
-                    ),
-                  ),
-                ],
+              child: Text(
+                'The music party game',
+                textAlign: TextAlign.center,
+                style: getRegularStyle(
+                  color: ColorManager.white,
+                  fontSize: FontSize.s20,
+                ),
               ),
             ),
           ],

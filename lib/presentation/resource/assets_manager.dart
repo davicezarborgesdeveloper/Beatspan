@@ -3,9 +3,8 @@ const String jsonPath = 'assets/json';
 
 class ImageAssets {
   static const String logoSplash = '$imagePath/splash_logo.png';
-  static const String rulesFreeImage = '$imagePath/How-to-Play-Free-1.png';
-  static const String rulesPremiumImage =
-      '$imagePath/How-to-Play-Premium-768x512.png';
+  static const String logoIcon = '$imagePath/icon.png';
+  static const String rulesImage = '$imagePath/How-to-Play.png';
 }
 
 class JsonAssets {

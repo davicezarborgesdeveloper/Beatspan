@@ -36,7 +36,7 @@ class _RulesViewState extends State<RulesView> {
               height: context.screenWidth / 1.5,
               decoration: const BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage(ImageAssets.rulesFreeImage),
+                  image: AssetImage(ImageAssets.rulesImage),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -63,9 +63,7 @@ class _RulesViewState extends State<RulesView> {
                 ),
               ),
             ),
-            const Column(
-              children: [],
-            ),
+            const Column(children: []),
           ],
         ),
       ),
