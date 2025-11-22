@@ -4,8 +4,11 @@ import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../data/data_source/faq_local_data_source.dart';
 import '../data/network/network_info.dart';
 import '../data/network/spotify_service.dart';
+import '../data/repository/faq_repository_impl.dart';
+import '../domain/repository/faq_repository.dart';
 import '../domain/usecase/faqs_usecase.dart';
 import '../presentation/connect_spotify_premium/connect_spotify_premium_view_model.dart';
 import '../presentation/faqs/faqs_view_model.dart';
@@ -33,33 +36,59 @@ final instance = GetIt.instance;
 
 Future<void> initAppModule() async {
   final sharedPrefs = await SharedPreferences.getInstance();
-  instance.registerLazySingleton<SharedPreferences>(() => sharedPrefs);
+  if (!instance.isRegistered<SharedPreferences>()) {
+    instance.registerLazySingleton<SharedPreferences>(() => sharedPrefs);
+  }
 
-  instance.registerLazySingleton<AppPreferences>(
-    () => AppPreferences(instance()),
-  );
+  if (!instance.isRegistered<AppPreferences>()) {
+    instance.registerLazySingleton<AppPreferences>(
+      () => AppPreferences(instance<SharedPreferences>()),
+    );
+  }
 
-  instance.registerLazySingleton<NetworkInfo>(
-    () => NetworkInfoImpl(Connectivity()),
-  );
+  if (!instance.isRegistered<NetworkInfo>()) {
+    instance.registerLazySingleton<NetworkInfo>(
+      () => NetworkInfoImpl(Connectivity()),
+    );
+  }
 
   final clientId = '8e1f4c38cf5543f5929e19c1d503205c';
   final redirectUrl = 'https://hitster-d8ac4.firebaseapp.com/';
 
-  instance.registerLazySingleton<SpotifyService>(
-    () => SpotifyService(clientId: clientId, redirectUrl: redirectUrl),
-  );
+  if (!instance.isRegistered<SpotifyService>()) {
+    instance.registerLazySingleton<SpotifyService>(
+      () => SpotifyService(clientId: clientId, redirectUrl: redirectUrl),
+    );
+  }
 }
 
 void initFaqsModule() {
-  if (!GetIt.I.isRegistered<FaqsUseCase>()) {
+  // 1) Data source
+  if (!instance.isRegistered<FaqLocalDataSource>()) {
+    instance.registerLazySingleton<FaqLocalDataSource>(
+      () => FaqLocalDataSourceImpl(),
+    );
+  }
+  // 2) Repository
+  if (!instance.isRegistered<FaqRepository>()) {
+    instance.registerLazySingleton<FaqRepository>(
+      () => FaqRepositoryImpl(instance()),
+    );
+  }
+  // 3) UseCase
+  if (!instance.isRegistered<FaqsUseCase>()) {
     instance.registerFactory<FaqsUseCase>(() => FaqsUseCase(instance()));
+  }
+  // 4) ViewModel
+  if (!instance.isRegistered<FaqsViewModel>()) {
     instance.registerFactory<FaqsViewModel>(() => FaqsViewModel(instance()));
   }
 }
 
 void initSpotifyModule() {
-  if (!GetIt.I.isRegistered<SpotifyService>()) {
-    instance.registerFactory<ConnectSpotifyPremiumViewModel>(() => instance());
+  if (!instance.isRegistered<ConnectSpotifyPremiumViewModel>()) {
+    instance.registerFactory<ConnectSpotifyPremiumViewModel>(
+      () => ConnectSpotifyPremiumViewModel(instance<SpotifyService>()),
+    );
   }
 }

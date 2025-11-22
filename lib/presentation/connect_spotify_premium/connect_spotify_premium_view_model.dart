@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -15,7 +14,7 @@ class ConnectSpotifyPremiumViewModel {
   final SpotifyService _spotify;
   ConnectSpotifyPremiumViewModel(this._spotify);
 
-  final state = ValueNotifier(FlowState.content);
+  final state = ValueNotifier<FlowState>(FlowState.content);
   final isConnected = ValueNotifier<bool>(false);
   final errorMessage = ValueNotifier<String?>(null);
 
@@ -37,7 +36,6 @@ class ConnectSpotifyPremiumViewModel {
   Future<void> connect() async {
     state.value = FlowState.loading;
     errorMessage.value = null;
-
     if (!_isSupportedPlatform) {
       state.value = FlowState.error;
       errorMessage.value = 'Spotify SDK só funciona em Android/iOS nativos.';
@@ -57,6 +55,7 @@ class ConnectSpotifyPremiumViewModel {
       }
 
       _appPreferences.setAppPlanType(PlanType.premium);
+      state.value = FlowState.success;
     } on MissingPluginException catch (_) {
       state.value = FlowState.error;
       errorMessage.value =
@@ -81,7 +80,6 @@ class ConnectSpotifyPremiumViewModel {
   void _handlePlatformException(PlatformException e) {
     state.value = FlowState.error;
     isConnected.value = false;
-    print('------:${e.code}');
     switch (e.code) {
       case 'CouldNotFindSpotifyApp':
         final url = Platform.isIOS

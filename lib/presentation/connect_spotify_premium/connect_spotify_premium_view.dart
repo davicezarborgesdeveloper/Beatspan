@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:spotify_sdk/spotify_sdk.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../app/di.dart';
-import '../../data/network/spotify_service.dart';
 import '../../domain/enum/flow_state.dart';
 import '../resource/color_manager.dart';
 import '../resource/font_manager.dart';
@@ -22,29 +18,36 @@ class ConnectSpotifyPremiumView extends StatefulWidget {
 }
 
 class _ConnectSpotifyPremiumViewState extends State<ConnectSpotifyPremiumView> {
-  final _viewModel = ConnectSpotifyPremiumViewModel(instance<SpotifyService>());
+  late final ConnectSpotifyPremiumViewModel _viewModel;
 
   @override
   void initState() {
+    super.initState();
     _bind();
+    initSpotifyModule();
+    _viewModel = instance<ConnectSpotifyPremiumViewModel>();
     _viewModel.state.addListener(() {
-      if (mounted && _viewModel.state.value == FlowState.error) {
-        final message = _viewModel.errorMessage.value ?? 'Erro desconhecido';
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              message,
-              style: getMediumStyle(
-                color: ColorManager.white,
-                fontSize: FontSize.s14,
+      if (mounted) {
+        if (_viewModel.state.value == FlowState.error) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                _viewModel.errorMessage.value ?? 'Erro desconhecido',
+                style: getMediumStyle(
+                  color: ColorManager.white,
+                  fontSize: FontSize.s14,
+                ),
               ),
+              backgroundColor: ColorManager.warning,
             ),
-            backgroundColor: ColorManager.warning,
-          ),
-        );
+          );
+        } else if (_viewModel.state.value == FlowState.success) {
+          Navigator.of(
+            context,
+          ).pushNamedAndRemoveUntil('/home', (Route<dynamic> route) => false);
+        }
       }
     });
-    super.initState();
   }
 
   void _bind() {
@@ -98,7 +101,7 @@ class _ConnectSpotifyPremiumViewState extends State<ConnectSpotifyPremiumView> {
               height: AppSize.s66,
               child: ElevatedButton(
                 onPressed: () async {
-                  _viewModel.connect();
+                  await _viewModel.connect();
                 },
                 child: Text(
                   'Ligar com Spotify',

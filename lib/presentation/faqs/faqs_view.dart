@@ -20,12 +20,14 @@ class FaqsView extends StatefulWidget {
 }
 
 class _FaqsViewState extends State<FaqsView> {
-  final FaqsViewModel _viewModel = instance<FaqsViewModel>();
+  late final FaqsViewModel _viewModel;
 
   @override
   void initState() {
-    _bind();
     super.initState();
+    initFaqsModule();
+    _viewModel = instance<FaqsViewModel>();
+    _bind();
   }
 
   void _bind() {

@@ -47,7 +47,6 @@ class RouteGenerator {
           builder: (_) => const ChangeSpotifyView(),
         );
       case Routes.changeSpotifyPremiumRoute:
-        initSpotifyModule();
         return MaterialPageRoute(
           builder: (_) => const ConnectSpotifyPremiumView(),
         );
