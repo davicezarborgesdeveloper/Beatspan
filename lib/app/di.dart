@@ -51,7 +51,6 @@ Future<void> initAppModule() async {
       () => NetworkInfoImpl(Connectivity()),
     );
   }
-
   final clientId = '8e1f4c38cf5543f5929e19c1d503205c';
   final redirectUrl = 'https://hitster-d8ac4.firebaseapp.com/';
 
@@ -91,4 +90,29 @@ void initSpotifyModule() {
       () => ConnectSpotifyPremiumViewModel(instance<SpotifyService>()),
     );
   }
+}
+
+void disposeFaqsModule() {
+  // ordem inversa da criação
+
+  if (instance.isRegistered<FaqsViewModel>()) {
+    instance.unregister<FaqsViewModel>();
+  }
+
+  if (instance.isRegistered<FaqsUseCase>()) {
+    instance.unregister<FaqsUseCase>();
+  }
+
+  if (instance.isRegistered<FaqRepository>()) {
+    instance.unregister<FaqRepository>();
+  }
+
+  if (instance.isRegistered<FaqLocalDataSource>()) {
+    instance.unregister<FaqLocalDataSource>();
+  }
+}
+
+Future<void> resetModules() async {
+  await instance.reset(); // zera tudo
+  await initAppModule(); // ou re-registra o que precisar
 }

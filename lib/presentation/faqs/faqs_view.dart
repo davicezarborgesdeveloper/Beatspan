@@ -35,6 +35,12 @@ class _FaqsViewState extends State<FaqsView> {
   }
 
   @override
+  void dispose() {
+    disposeFaqsModule();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ColorManager.black,

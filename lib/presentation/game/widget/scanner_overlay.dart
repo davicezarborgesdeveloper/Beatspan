@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../app/di.dart';
+
 class ScannerOverlay extends StatelessWidget {
   const ScannerOverlay({super.key});
 
@@ -15,9 +17,10 @@ class ScannerOverlay extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 _roundIcon(
-                  icon: Icons.help_outline,
+                  icon: Icons.question_mark,
                   onTap: () {
-                    // abrir ajuda
+                    initFaqsModule();
+                    Navigator.of(context).pushNamed('/faq');
                   },
                 ),
                 _roundIcon(
@@ -48,23 +51,7 @@ class ScannerOverlay extends StatelessWidget {
                 height: 260,
                 child: Stack(
                   alignment: Alignment.center,
-                  children: [
-                    _squared(),
-
-                    Container(
-                      width: 80,
-                      height: 80,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(color: Colors.white, width: 3),
-                      ),
-                      child: const Icon(
-                        Icons.play_arrow,
-                        color: Colors.white,
-                        size: 40,
-                      ),
-                    ),
-                  ],
+                  children: [_squared()],
                 ),
               ),
             ],
@@ -98,7 +85,6 @@ class ScannerOverlay extends StatelessWidget {
             ),
           ),
 
-          // canto superior direito
           Positioned(
             top: 0,
             right: 0,
@@ -116,7 +102,6 @@ class ScannerOverlay extends StatelessWidget {
             ),
           ),
 
-          // canto inferior esquerdo
           Positioned(
             bottom: 0,
             left: 0,
@@ -134,7 +119,6 @@ class ScannerOverlay extends StatelessWidget {
             ),
           ),
 
-          // canto inferior direito
           Positioned(
             bottom: 0,
             right: 0,
@@ -152,7 +136,6 @@ class ScannerOverlay extends StatelessWidget {
             ),
           ),
 
-          // bolinha com ícone de play (só visual)
           Align(
             alignment: Alignment.center,
             child: Container(
@@ -183,7 +166,7 @@ class ScannerOverlay extends StatelessWidget {
         height: 40,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: Colors.black.withValues(alpha: 0.5),
+          border: Border.all(color: Colors.white, width: 1),
         ),
         child: Icon(icon, color: Colors.white),
       ),

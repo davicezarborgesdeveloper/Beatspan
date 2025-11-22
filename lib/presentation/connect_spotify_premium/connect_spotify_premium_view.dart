@@ -23,7 +23,6 @@ class _ConnectSpotifyPremiumViewState extends State<ConnectSpotifyPremiumView> {
   @override
   void initState() {
     super.initState();
-    _bind();
     initSpotifyModule();
     _viewModel = instance<ConnectSpotifyPremiumViewModel>();
     _viewModel.state.addListener(() {
@@ -48,6 +47,7 @@ class _ConnectSpotifyPremiumViewState extends State<ConnectSpotifyPremiumView> {
         }
       }
     });
+    _bind();
   }
 
   void _bind() {
