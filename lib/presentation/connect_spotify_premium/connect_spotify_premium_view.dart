@@ -41,9 +41,9 @@ class _ConnectSpotifyPremiumViewState extends State<ConnectSpotifyPremiumView> {
             ),
           );
         } else if (_viewModel.state.value == FlowState.success) {
-          Navigator.of(
-            context,
-          ).pushNamedAndRemoveUntil('/home', (Route<dynamic> route) => false);
+          // Navigator.of(
+          //   context,
+          // ).pushNamedAndRemoveUntil('/home', (Route<dynamic> route) => false);
         }
       }
     });
