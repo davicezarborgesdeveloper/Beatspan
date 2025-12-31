@@ -6,12 +6,12 @@ Este documento rastreia todas as melhorias implementadas conforme o roadmap defi
 
 | Fase | Total | Concluídas | Em Progresso | Pendentes |
 |------|-------|------------|--------------|-----------|
-| **Curto Prazo** | 9 | 4 | 0 | 5 |
+| **Curto Prazo** | 9 | 6 | 0 | 3 |
 | **Médio Prazo** | 12 | 0 | 0 | 12 |
 | **Longo Prazo** | 18 | 0 | 0 | 18 |
-| **TOTAL** | 39 | 4 | 0 | 35 |
+| **TOTAL** | 39 | 6 | 0 | 33 |
 
-**Progresso:** 10.26% (4/39)
+**Progresso:** 15.38% (6/39)
 
 ---
 
@@ -51,39 +51,49 @@ Este documento rastreia todas as melhorias implementadas conforme o roadmap defi
 - **Documentação:** [docs/melhorias/curto-prazo/004-http-timeout.md](docs/melhorias/curto-prazo/004-http-timeout.md)
 - **Impacto:** Requisições sem timeout resolvidas (CVSS 5.3 → 2.0)
 
-#### ⏳ #005 - Sanitizar URLs em FAQs
-- **Status:** ⏳ PENDENTE
-- **Prioridade:** P2
-- **Esforço:** 1h
-- **Documentação:** [docs/melhorias/curto-prazo/005-sanitize-urls.md](docs/melhorias/curto-prazo/005-sanitize-urls.md)
-
 ---
 
 ### 🧪 Qualidade - 16h
 
-#### ⏳ #006 - Escrever 20 Testes Unitários Básicos
+#### ✅ #005 - Criar `.gitignore` Completo
+- **Status:** ✅ CONCLUÍDO
+- **Data:** 2025-12-31
+- **Prioridade:** P1 (ALTO)
+- **Esforço:** 30min
+- **Documentação:** [docs/melhorias/curto-prazo/005-gitignore-completo.md](docs/melhorias/curto-prazo/005-gitignore-completo.md)
+- **Impacto:** Repositório limpo e protegido (cobertura 40% → 95%)
+
+#### ✅ #006 - Sanitizar URLs em FAQs
+- **Status:** ✅ CONCLUÍDO
+- **Data:** 2025-12-31
+- **Prioridade:** P2 (MÉDIO)
+- **Esforço:** 1h
+- **Documentação:** [docs/melhorias/curto-prazo/006-sanitize-urls.md](docs/melhorias/curto-prazo/006-sanitize-urls.md)
+- **Impacto:** URLs maliciosas bloqueadas (CVSS 6.1 → 2.0)
+
+#### ⏳ #007 - Escrever 20 Testes Unitários Básicos
 - **Status:** ⏳ PENDENTE
 - **Prioridade:** P1
 - **Esforço:** 8h
-- **Documentação:** [docs/melhorias/curto-prazo/006-testes-unitarios.md](docs/melhorias/curto-prazo/006-testes-unitarios.md)
+- **Documentação:** [docs/melhorias/curto-prazo/007-testes-unitarios.md](docs/melhorias/curto-prazo/007-testes-unitarios.md)
 
-#### ⏳ #007 - Configurar GitHub Actions (CI)
+#### ⏳ #008 - Configurar GitHub Actions (CI)
 - **Status:** ⏳ PENDENTE
 - **Prioridade:** P1
 - **Esforço:** 4h
-- **Documentação:** [docs/melhorias/curto-prazo/007-github-actions.md](docs/melhorias/curto-prazo/007-github-actions.md)
+- **Documentação:** [docs/melhorias/curto-prazo/008-github-actions.md](docs/melhorias/curto-prazo/008-github-actions.md)
 
-#### ⏳ #008 - Atualizar README Completo
+#### ⏳ #009 - Atualizar README Completo
 - **Status:** ⏳ PENDENTE
 - **Prioridade:** P2
 - **Esforço:** 2h
-- **Documentação:** [docs/melhorias/curto-prazo/008-readme-completo.md](docs/melhorias/curto-prazo/008-readme-completo.md)
+- **Documentação:** [docs/melhorias/curto-prazo/009-readme-completo.md](docs/melhorias/curto-prazo/009-readme-completo.md)
 
-#### ⏳ #009 - Remover Código Comentado
+#### ⏳ #010 - Remover Código Comentado
 - **Status:** ⏳ PENDENTE
 - **Prioridade:** P3
 - **Esforço:** 1h
-- **Documentação:** [docs/melhorias/curto-prazo/009-remover-codigo-comentado.md](docs/melhorias/curto-prazo/009-remover-codigo-comentado.md)
+- **Documentação:** [docs/melhorias/curto-prazo/010-remover-codigo-comentado.md](docs/melhorias/curto-prazo/010-remover-codigo-comentado.md)
 
 ---
 
@@ -176,16 +186,16 @@ _(... continua)_
 | Prioridade | Total | Concluídas | Pendentes | % |
 |------------|-------|------------|-----------|---|
 | P0 (CRÍTICO) | 3 | 3 | 0 | 100% |
-| P1 (ALTO) | 5 | 1 | 4 | 20% |
-| P2 (MÉDIO) | 3 | 0 | 3 | 0% |
+| P1 (ALTO) | 5 | 2 | 3 | 40% |
+| P2 (MÉDIO) | 3 | 1 | 2 | 33.3% |
 | P3 (BAIXO) | 1 | 0 | 1 | 0% |
 
 ### Por Categoria
 
 | Categoria | Total | Concluídas | Pendentes | % |
 |-----------|-------|------------|-----------|---|
-| Segurança | 6 | 4 | 2 | 66.7% |
-| Qualidade | 5 | 0 | 5 | 0% |
+| Segurança | 6 | 5 | 1 | 83.3% |
+| Qualidade | 5 | 1 | 4 | 20% |
 | Arquitetura | 4 | 0 | 4 | 0% |
 | Observabilidade | 3 | 0 | 3 | 0% |
 | Features | 4 | 0 | 4 | 0% |
@@ -222,8 +232,10 @@ Com base na análise de prioridade e impacto:
 2. ✅ ~~**#002 - Release Signing** (P0, 1h) - CONCLUÍDO~~
 3. ✅ ~~**#003 - Secure Storage** (P0, 3h) - CONCLUÍDO~~
 4. ✅ ~~**#004 - HTTP Timeout** (P1, 30min) - CONCLUÍDO~~
-5. **#006 - Testes Unitários** (P1, 8h) - Qualidade essencial
-6. **#007 - GitHub Actions** (P1, 4h) - Automação crítica
+5. ✅ ~~**#005 - .gitignore Completo** (P1, 30min) - CONCLUÍDO~~
+6. ✅ ~~**#006 - Sanitizar URLs** (P2, 1h) - CONCLUÍDO~~
+7. **#007 - Testes Unitários** (P1, 8h) - Qualidade essencial
+8. **#008 - GitHub Actions** (P1, 4h) - Automação crítica
 
 ---
 

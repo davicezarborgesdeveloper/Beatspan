@@ -1,8 +1,20 @@
+# ============================================================================
+# Beatspan - .gitignore
+# ============================================================================
+# Arquivo de exclusão Git completo para projeto Flutter
+# Atualizado em: 2025-12-31
+# ============================================================================
+
+# ============================================================================
 # Miscellaneous
+# ============================================================================
 *.class
+*.lock
 *.log
 *.pyc
 *.swp
+*.swo
+*~
 .DS_Store
 .atom/
 .build/
@@ -11,54 +23,378 @@
 .svn/
 .swiftpm/
 migrate_working_dir/
+*.bak
+*.tmp
+*.temp
+~*
 
-# IntelliJ related
+# ============================================================================
+# IntelliJ / Android Studio
+# ============================================================================
 *.iml
 *.ipr
 *.iws
 .idea/
+*.hprof
 
-# The .vscode folder contains launch configuration and tasks you configure in
-# VS Code which you may wish to be included in version control, so this line
-# is commented out by default.
-#.vscode/
+# Captures folder (Android Studio screenshots)
+captures/
 
-# Flutter/Dart/Pub related
+# Android Studio Navigation editor temp files
+.navigation/
+
+# Android Studio 3.1+ serialized cache file
+.idea/caches/build_file_checksums.ser
+
+# ============================================================================
+# VS Code
+# ============================================================================
+# Uncomment if you want to exclude VS Code settings
+# .vscode/
+
+# Keep launch configurations (optional - comment out if you want to version)
+# .vscode/launch.json
+# .vscode/tasks.json
+# .vscode/extensions.json
+
+# ============================================================================
+# Flutter / Dart / Pub
+# ============================================================================
 **/doc/api/
 **/ios/Flutter/.last_build_id
 .dart_tool/
+.flutter-plugins
 .flutter-plugins-dependencies
+.packages
 .pub-cache/
 .pub/
-/build/
-/coverage/
+build/
+coverage/
+lib/generated_plugin_registrant.dart
 
-# Symbolication related
-app.*.symbols
+# Flutter build outputs
+*.g.dart
+*.freezed.dart
+*.mocks.dart
 
-# Obfuscation related
-app.*.map.json
+# Pub packages
+pubspec.lock  # Uncomment if you want to version this
 
-# Android Studio will place build artifacts here
+# ============================================================================
+# Android
+# ============================================================================
+# Build outputs
 /android/app/debug
 /android/app/profile
 /android/app/release
+/android/.gradle/
+/android/gradle/
+/android/gradlew
+/android/gradlew.bat
+/android/local.properties
+/android/captures/
+/android/app/build/
+/android/build/
 
-# Environment variables and secrets
-.env
-.env.local
-.env.*.local
+# NDK
+obj/
+*.so
+*.o
 
-# Android signing keys
+# Local configuration file (sdk path, etc)
+local.properties
+
+# Android Studio / IntelliJ
+*.iml
+.gradle
+.idea
+
+# Signing files
+*.jks
+*.keystore
 android/key.properties
 android/app/keystore.jks
 android/app/*.keystore
 android/app/beatspan-release.keystore
+android/beatspan-release.keystore
 
-# iOS signing
+# Android Profiler
+*.hprof
+
+# ============================================================================
+# iOS / Xcode
+# ============================================================================
+# Build outputs
+**/ios/Flutter/App.framework
+**/ios/Flutter/Flutter.framework
+**/ios/Flutter/Flutter.podspec
+**/ios/Flutter/Generated.xcconfig
+**/ios/Flutter/app.flx
+**/ios/Flutter/app.zip
+**/ios/Flutter/flutter_assets/
+**/ios/Flutter/flutter_export_environment.sh
+**/ios/ServiceDefinitions.json
+**/ios/Runner/GeneratedPluginRegistrant.*
+
+# Xcode
+**/ios/**/*.mode1v3
+**/ios/**/*.mode2v3
+**/ios/**/*.moved-aside
+**/ios/**/*.pbxuser
+**/ios/**/*.perspectivev3
+**/ios/**/*sync/
+**/ios/**/.sconsign.dblite
+**/ios/**/.tags*
+**/ios/**/.vagrant/
+**/ios/**/DerivedData/
+**/ios/**/Icon?
+**/ios/**/Pods/
+**/ios/**/.symlinks/
+**/ios/**/profile
+**/ios/**/xcuserdata
+**/ios/.generated/
+**/ios/Flutter/flutter_export_environment.sh
+
+# iOS signing & provisioning
+**/*.cer
+**/*.p12
+**/*.mobileprovision
+**/*.pbxuser
+**/*.xcuserstate
+**/*.xcworkspace
+*.xcodeproj/*
+!*.xcodeproj/project.pbxproj
+!*.xcworkspace/contents.xcworkspacedata
+
+# CocoaPods
+Pods/
+.symlinks/
+
+# iOS config files (sensitive)
 ios/Runner/GoogleService-Info.plist
 ios/Runner/Config.xcconfig
 
+# ============================================================================
+# Web
+# ============================================================================
+# Build outputs
+/web/build/
+
+# ============================================================================
+# Windows
+# ============================================================================
+# Build outputs
+windows/flutter/generated_*
+windows/flutter/ephemeral/
+
+# Visual Studio user-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Visual Studio cache/options directory
+.vs/
+
+# ============================================================================
+# Linux
+# ============================================================================
+# Build outputs
+linux/flutter/generated_*
+linux/flutter/ephemeral/
+
+# ============================================================================
+# macOS
+# ============================================================================
+# Build outputs
+macos/Flutter/GeneratedPluginRegistrant.swift
+macos/Flutter/ephemeral/
+
+# General
+*.DS_Store
+.AppleDouble
+.LSOverride
+
+# Thumbnails
+._*
+
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# ============================================================================
+# Environment Variables & Secrets
+# ============================================================================
+.env
+.env.local
+.env.*.local
+.env.development
+.env.production
+.env.staging
+.env.test
+
+# API Keys and credentials
+**/secrets.json
+**/credentials.json
+**/api_keys.json
+**/config.json
+
+# ============================================================================
 # Firebase
+# ============================================================================
+# Firebase config files (sensitive)
 google-services.json
+GoogleService-Info.plist
 firebase-app-id.json
+firebase.json
+.firebase/
+.firebaserc
+
+# Firebase debug logs
+firebase-debug.log
+firebase-debug.*.log
+
+# ============================================================================
+# Testing
+# ============================================================================
+# Coverage reports
+coverage/
+.coverage
+htmlcov/
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# Test outputs
+test_driver/*.txt
+integration_test/screenshots/
+*_test.mocks.dart
+
+# ============================================================================
+# Symbolication & Obfuscation
+# ============================================================================
+app.*.symbols
+app.*.map.json
+
+# Source maps
+*.js.map
+
+# ============================================================================
+# Documentation
+# ============================================================================
+# Generated docs
+doc/api/
+docs/api/
+
+# ============================================================================
+# Database & Cache
+# ============================================================================
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+*.realm
+
+# Cache directories
+.cache/
+cache/
+
+# ============================================================================
+# Logs & Debug
+# ============================================================================
+*.log
+logs/
+*.out
+*.err
+
+# Crashlytics
+crashlytics-build.properties
+com_crashlytics_export_strings.xml
+
+# ============================================================================
+# CI/CD
+# ============================================================================
+# Fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots
+fastlane/test_output
+fastlane/readme.md
+
+# ============================================================================
+# Package Managers
+# ============================================================================
+# NPM (caso use ferramentas JS)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+
+# ============================================================================
+# IDE & Editors
+# ============================================================================
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+*.swp
+*.swo
+*~
+
+# Emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+
+# ============================================================================
+# OS Specific
+# ============================================================================
+# Thumbnails
+Thumbs.db
+ehthumbs.db
+
+# Folder config file
+Desktop.ini
+
+# Recycle Bin
+$RECYCLE.BIN/
+
+# ============================================================================
+# Custom Project Files
+# ============================================================================
+# Temporary files
+*.tmp
+*.temp
+temp/
+tmp/
+
+# Backup files
+*.backup
+*.old
+
+# Analysis & Profiling
+*.trace
+*.profile
+
+# ============================================================================
+# End of .gitignore
+# ============================================================================

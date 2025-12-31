@@ -2591,8 +2591,8 @@ git push
 - [x] **P0** - Configurar release signing correto (1h)
 - [x] **P0** - Implementar `flutter_secure_storage` (3h)
 - [x] **P1** - Adicionar timeout em requisições HTTP (30min)
-- [ ] **P1** - Criar `.gitignore` completo (30min)
-- [ ] **P2** - Sanitizar URLs em FAQs (1h)
+- [x] **P1** - Criar `.gitignore` completo (30min)
+- [x] **P2** - Sanitizar URLs em FAQs (1h)
 
 #### 🧪 Qualidade - 16h
 - [ ] **P1** - Escrever 20 testes unitários básicos (8h)
