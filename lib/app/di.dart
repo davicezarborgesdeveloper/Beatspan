@@ -1,6 +1,7 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -51,8 +52,16 @@ Future<void> initAppModule() async {
       () => NetworkInfoImpl(Connectivity()),
     );
   }
-  final clientId = '8e1f4c38cf5543f5929e19c1d503205c';
-  final redirectUrl = 'https://hitster-d8ac4.firebaseapp.com/';
+
+  // Carrega credenciais do Spotify a partir das variáveis de ambiente
+  final clientId = dotenv.env['SPOTIFY_CLIENT_ID'];
+  final redirectUrl = dotenv.env['SPOTIFY_REDIRECT_URL'];
+
+  if (clientId == null || redirectUrl == null) {
+    throw Exception(
+      'SPOTIFY_CLIENT_ID e SPOTIFY_REDIRECT_URL devem estar definidos no arquivo .env',
+    );
+  }
 
   if (!instance.isRegistered<SpotifyService>()) {
     instance.registerLazySingleton<SpotifyService>(

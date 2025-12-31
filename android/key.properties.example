@@ -1,0 +1,21 @@
+# Configuração de Signing para Release Build
+#
+# IMPORTANTE:
+# - Este é um arquivo de EXEMPLO. Copie para 'key.properties' e preencha com seus valores reais.
+# - NUNCA commite o arquivo 'key.properties' no Git!
+# - O arquivo já está no .gitignore
+#
+# Para criar o keystore, execute: android\setup-keystore.bat
+#
+
+# Senha do keystore (definida durante a criação do keystore)
+storePassword=YOUR_STORE_PASSWORD_HERE
+
+# Senha da key (definida durante a criação do keystore)
+keyPassword=YOUR_KEY_PASSWORD_HERE
+
+# Alias da key (use 'beatspan' se seguiu o script)
+keyAlias=beatspan
+
+# Caminho para o arquivo keystore (relativo a android/app/)
+storeFile=../beatspan-release.keystore

@@ -43,3 +43,22 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Environment variables and secrets
+.env
+.env.local
+.env.*.local
+
+# Android signing keys
+android/key.properties
+android/app/keystore.jks
+android/app/*.keystore
+android/app/beatspan-release.keystore
+
+# iOS signing
+ios/Runner/GoogleService-Info.plist
+ios/Runner/Config.xcconfig
+
+# Firebase
+google-services.json
+firebase-app-id.json

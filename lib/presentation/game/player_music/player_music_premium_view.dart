@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:spotify_sdk/models/player_state.dart';
 import 'package:spotify_sdk/spotify_sdk.dart';
 
@@ -43,9 +44,20 @@ class _PlayerMusicPremiumViewState extends State<PlayerMusicPremiumView> {
       // IMPORTANTE: conectar antes de tocar / assinar streams
       // Se você já faz isso em outro lugar (ex: ConnectSpotifyPremiumView),
       // pode pular essa parte ou checar conexão antes de conectar de novo.
+
+      // Carrega credenciais do arquivo .env
+      final clientId = dotenv.env['SPOTIFY_CLIENT_ID'];
+      final redirectUrl = dotenv.env['SPOTIFY_REDIRECT_URL'];
+
+      if (clientId == null || redirectUrl == null) {
+        throw Exception(
+          'SPOTIFY_CLIENT_ID e SPOTIFY_REDIRECT_URL não encontrados no .env',
+        );
+      }
+
       await SpotifySdk.connectToSpotifyRemote(
-        clientId: 'SEU_CLIENT_ID_AQUI',
-        redirectUrl: 'SEU_REDIRECT_URL_AQUI',
+        clientId: clientId,
+        redirectUrl: redirectUrl,
       );
 
       await SpotifySdk.play(spotifyUri: widget.initialUri);
