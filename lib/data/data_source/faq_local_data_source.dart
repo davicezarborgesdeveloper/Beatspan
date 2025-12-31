@@ -3,11 +3,11 @@ import 'dart:developer';
 
 import 'package:flutter/services.dart';
 
-abstract class LocalDataSource {
+abstract class FaqLocalDataSource {
   Future<dynamic> getDataFromJson(String fileName);
 }
 
-class LocalDataSourceImpl implements LocalDataSource {
+class FaqLocalDataSourceImpl implements FaqLocalDataSource {
   @override
   Future<dynamic> getDataFromJson(String fileName) async {
     try {

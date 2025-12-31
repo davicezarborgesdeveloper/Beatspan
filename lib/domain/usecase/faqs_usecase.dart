@@ -2,11 +2,11 @@ import 'package:dartz/dartz.dart';
 
 import '../../data/failure.dart';
 import '../model/faqs.dart';
-import '../repository/repository.dart';
+import '../repository/faq_repository.dart';
 import 'base_usecase.dart';
 
 class FaqsUseCase extends BaseUseCase<void, Object> {
-  final Repository _repository;
+  final FaqRepository _repository;
   FaqsUseCase(this._repository);
 
   @override

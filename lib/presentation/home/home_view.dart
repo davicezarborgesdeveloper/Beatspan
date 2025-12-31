@@ -30,9 +30,7 @@ class _HomeViewState extends State<HomeView> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Padding(
-              padding: const EdgeInsets.only(
-                top: 130,
-              ),
+              padding: const EdgeInsets.only(top: 130),
               child: Column(
                 children: [
                   Text(
@@ -56,9 +54,7 @@ class _HomeViewState extends State<HomeView> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(
-                bottom: AppPadding.p80,
-              ),
+              padding: const EdgeInsets.only(bottom: AppPadding.p80),
               child: Column(
                 children: [
                   SizedBox(
@@ -72,9 +68,7 @@ class _HomeViewState extends State<HomeView> {
                       ),
                       onPressed: () {
                         Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (_) => const RulesView(),
-                          ),
+                          MaterialPageRoute(builder: (_) => const RulesView()),
                         );
                       },
                       child: Text(
@@ -87,8 +81,9 @@ class _HomeViewState extends State<HomeView> {
                     ),
                   ),
                   Padding(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: AppPadding.p24),
+                    padding: const EdgeInsets.symmetric(
+                      vertical: AppPadding.p24,
+                    ),
                     child: Text(
                       'OU',
                       style: getMediumStyle(
@@ -102,11 +97,9 @@ class _HomeViewState extends State<HomeView> {
                     width: AppSize.s220,
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (_) => const GameView(),
-                          ),
-                        );
+                        Navigator.of(
+                          context,
+                        ).push(MaterialPageRoute(builder: (_) => GameView()));
                       },
                       child: Text(
                         'Começar um jogo',

@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
@@ -13,4 +16,7 @@ extension SizeExtensions on BuildContext {
 
   double percentWidth(double p) => math.max(0.0, screenWidth * p);
   double percentHeight(double p) => math.max(0.0, screenHeight * p);
+
+  bool get isSupportedPlatform =>
+      !kIsWeb && (Platform.isAndroid || Platform.isIOS);
 }
