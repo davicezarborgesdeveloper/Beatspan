@@ -6,12 +6,12 @@ Este documento rastreia todas as melhorias implementadas conforme o roadmap defi
 
 | Fase | Total | Concluídas | Em Progresso | Pendentes |
 |------|-------|------------|--------------|-----------|
-| **Curto Prazo** | 9 | 3 | 0 | 6 |
+| **Curto Prazo** | 9 | 4 | 0 | 5 |
 | **Médio Prazo** | 12 | 0 | 0 | 12 |
 | **Longo Prazo** | 18 | 0 | 0 | 18 |
-| **TOTAL** | 39 | 3 | 0 | 36 |
+| **TOTAL** | 39 | 4 | 0 | 35 |
 
-**Progresso:** 7.69% (3/39)
+**Progresso:** 10.26% (4/39)
 
 ---
 
@@ -43,11 +43,13 @@ Este documento rastreia todas as melhorias implementadas conforme o roadmap defi
 - **Documentação:** [docs/melhorias/curto-prazo/003-secure-storage.md](docs/melhorias/curto-prazo/003-secure-storage.md)
 - **Impacto:** Armazenamento inseguro resolvido (CVSS 7.5 → 2.0)
 
-#### ⏳ #004 - Adicionar Timeout em Requisições HTTP
-- **Status:** ⏳ PENDENTE
-- **Prioridade:** P1
+#### ✅ #004 - Adicionar Timeout em Requisições HTTP
+- **Status:** ✅ CONCLUÍDO
+- **Data:** 2025-12-31
+- **Prioridade:** P1 (ALTO)
 - **Esforço:** 30min
 - **Documentação:** [docs/melhorias/curto-prazo/004-http-timeout.md](docs/melhorias/curto-prazo/004-http-timeout.md)
+- **Impacto:** Requisições sem timeout resolvidas (CVSS 5.3 → 2.0)
 
 #### ⏳ #005 - Sanitizar URLs em FAQs
 - **Status:** ⏳ PENDENTE
@@ -174,7 +176,7 @@ _(... continua)_
 | Prioridade | Total | Concluídas | Pendentes | % |
 |------------|-------|------------|-----------|---|
 | P0 (CRÍTICO) | 3 | 3 | 0 | 100% |
-| P1 (ALTO) | 5 | 0 | 5 | 0% |
+| P1 (ALTO) | 5 | 1 | 4 | 20% |
 | P2 (MÉDIO) | 3 | 0 | 3 | 0% |
 | P3 (BAIXO) | 1 | 0 | 1 | 0% |
 
@@ -182,7 +184,7 @@ _(... continua)_
 
 | Categoria | Total | Concluídas | Pendentes | % |
 |-----------|-------|------------|-----------|---|
-| Segurança | 6 | 3 | 3 | 50% |
+| Segurança | 6 | 4 | 2 | 66.7% |
 | Qualidade | 5 | 0 | 5 | 0% |
 | Arquitetura | 4 | 0 | 4 | 0% |
 | Observabilidade | 3 | 0 | 3 | 0% |
@@ -219,7 +221,7 @@ Com base na análise de prioridade e impacto:
 1. ✅ ~~**#001 - Credenciais .env** (P0, 2h) - CONCLUÍDO~~
 2. ✅ ~~**#002 - Release Signing** (P0, 1h) - CONCLUÍDO~~
 3. ✅ ~~**#003 - Secure Storage** (P0, 3h) - CONCLUÍDO~~
-4. **#004 - HTTP Timeout** (P1, 30min) - Segurança crítica
+4. ✅ ~~**#004 - HTTP Timeout** (P1, 30min) - CONCLUÍDO~~
 5. **#006 - Testes Unitários** (P1, 8h) - Qualidade essencial
 6. **#007 - GitHub Actions** (P1, 4h) - Automação crítica
 

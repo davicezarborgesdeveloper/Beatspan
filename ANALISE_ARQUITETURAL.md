@@ -2590,7 +2590,7 @@ git push
 - [x] **P0** - Remover credenciais hardcodeadas → `.env` (2h)
 - [x] **P0** - Configurar release signing correto (1h)
 - [x] **P0** - Implementar `flutter_secure_storage` (3h)
-- [ ] **P1** - Adicionar timeout em requisições HTTP (30min)
+- [x] **P1** - Adicionar timeout em requisições HTTP (30min)
 - [ ] **P1** - Criar `.gitignore` completo (30min)
 - [ ] **P2** - Sanitizar URLs em FAQs (1h)
 
