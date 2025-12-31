@@ -14,6 +14,7 @@ import '../domain/usecase/faqs_usecase.dart';
 import '../presentation/connect_spotify_premium/connect_spotify_premium_view_model.dart';
 import '../presentation/faqs/faqs_view_model.dart';
 import 'app_prefs.dart';
+import 'secure_storage.dart';
 
 void systemChromeConfigure() async {
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
@@ -41,9 +42,17 @@ Future<void> initAppModule() async {
     instance.registerLazySingleton<SharedPreferences>(() => sharedPrefs);
   }
 
+  // Registra SecureStorage para dados sensíveis
+  if (!instance.isRegistered<SecureStorage>()) {
+    instance.registerLazySingleton<SecureStorage>(() => SecureStorage());
+  }
+
   if (!instance.isRegistered<AppPreferences>()) {
     instance.registerLazySingleton<AppPreferences>(
-      () => AppPreferences(instance<SharedPreferences>()),
+      () => AppPreferences(
+        instance<SharedPreferences>(),
+        instance<SecureStorage>(),
+      ),
     );
   }
 

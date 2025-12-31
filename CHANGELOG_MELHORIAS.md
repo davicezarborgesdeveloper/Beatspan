@@ -6,12 +6,12 @@ Este documento rastreia todas as melhorias implementadas conforme o roadmap defi
 
 | Fase | Total | Concluídas | Em Progresso | Pendentes |
 |------|-------|------------|--------------|-----------|
-| **Curto Prazo** | 9 | 2 | 0 | 7 |
+| **Curto Prazo** | 9 | 3 | 0 | 6 |
 | **Médio Prazo** | 12 | 0 | 0 | 12 |
 | **Longo Prazo** | 18 | 0 | 0 | 18 |
-| **TOTAL** | 39 | 2 | 0 | 37 |
+| **TOTAL** | 39 | 3 | 0 | 36 |
 
-**Progresso:** 5.13% (2/39)
+**Progresso:** 7.69% (3/39)
 
 ---
 
@@ -35,11 +35,13 @@ Este documento rastreia todas as melhorias implementadas conforme o roadmap defi
 - **Documentação:** [docs/melhorias/curto-prazo/002-release-signing.md](docs/melhorias/curto-prazo/002-release-signing.md)
 - **Impacto:** Bloqueador de publicação resolvido (CVSS 8.9 → 2.0)
 
-#### ⏳ #003 - Implementar `flutter_secure_storage`
-- **Status:** ⏳ PENDENTE
+#### ✅ #003 - Implementar `flutter_secure_storage`
+- **Status:** ✅ CONCLUÍDO
+- **Data:** 2025-12-31
 - **Prioridade:** P0 (CRÍTICO)
 - **Esforço:** 3h
 - **Documentação:** [docs/melhorias/curto-prazo/003-secure-storage.md](docs/melhorias/curto-prazo/003-secure-storage.md)
+- **Impacto:** Armazenamento inseguro resolvido (CVSS 7.5 → 2.0)
 
 #### ⏳ #004 - Adicionar Timeout em Requisições HTTP
 - **Status:** ⏳ PENDENTE
@@ -171,7 +173,7 @@ _(... continua)_
 
 | Prioridade | Total | Concluídas | Pendentes | % |
 |------------|-------|------------|-----------|---|
-| P0 (CRÍTICO) | 3 | 1 | 2 | 33% |
+| P0 (CRÍTICO) | 3 | 3 | 0 | 100% |
 | P1 (ALTO) | 5 | 0 | 5 | 0% |
 | P2 (MÉDIO) | 3 | 0 | 3 | 0% |
 | P3 (BAIXO) | 1 | 0 | 1 | 0% |
@@ -180,7 +182,7 @@ _(... continua)_
 
 | Categoria | Total | Concluídas | Pendentes | % |
 |-----------|-------|------------|-----------|---|
-| Segurança | 6 | 1 | 5 | 16.7% |
+| Segurança | 6 | 3 | 3 | 50% |
 | Qualidade | 5 | 0 | 5 | 0% |
 | Arquitetura | 4 | 0 | 4 | 0% |
 | Observabilidade | 3 | 0 | 3 | 0% |
@@ -214,11 +216,12 @@ _(... continua)_
 
 Com base na análise de prioridade e impacto:
 
-1. **#002 - Release Signing** (P0, 1h) - Bloqueador para produção
-2. **#003 - Secure Storage** (P0, 3h) - Bloqueador para produção
-3. **#004 - HTTP Timeout** (P1, 30min) - Segurança crítica
-4. **#006 - Testes Unitários** (P1, 8h) - Qualidade essencial
-5. **#007 - GitHub Actions** (P1, 4h) - Automação crítica
+1. ✅ ~~**#001 - Credenciais .env** (P0, 2h) - CONCLUÍDO~~
+2. ✅ ~~**#002 - Release Signing** (P0, 1h) - CONCLUÍDO~~
+3. ✅ ~~**#003 - Secure Storage** (P0, 3h) - CONCLUÍDO~~
+4. **#004 - HTTP Timeout** (P1, 30min) - Segurança crítica
+5. **#006 - Testes Unitários** (P1, 8h) - Qualidade essencial
+6. **#007 - GitHub Actions** (P1, 4h) - Automação crítica
 
 ---
 

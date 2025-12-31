@@ -23,6 +23,7 @@ dependencies:
   just_audio: ^0.10.5
   http: ^1.6.0
   flutter_dotenv: ^6.0.0
+  flutter_secure_storage: ^10.0.0
 
 
 dev_dependencies:
