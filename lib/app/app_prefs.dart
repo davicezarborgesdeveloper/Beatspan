@@ -21,7 +21,7 @@ class AppPreferences {
   }
 
   Future<void> setAppCountry(CountryType country) async {
-    await _sharedPreferences.setString(prefsKeyLanguage, country.name);
+    await _sharedPreferences.setString(prefsKeyCountry, country.name);
   }
 
   Future<CountryType?> getAppCountry() async {

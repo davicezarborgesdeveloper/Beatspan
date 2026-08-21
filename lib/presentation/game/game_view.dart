@@ -8,7 +8,7 @@ import '../../data/network/spotify_webapi.dart';
 import '../../domain/enum/settings_enum.dart';
 import 'game_viewmodel.dart';
 import 'game_error_view.dart';
-// import 'player_music/play_music_free_view.dart';
+import 'player_music/play_music_free_view.dart';
 import 'player_music/player_music_premium_view.dart';
 import 'widget/scanner_overlay.dart';
 
@@ -86,12 +86,12 @@ class _GameViewState extends State<GameView> {
         final previewUrl = await api.getTrackPreviewUrl(trackId);
 
         if (previewUrl == null) {
-          await _goToError();
+          await _goToPreviewUnavailable();
           return;
         }
 
         if (!mounted) return;
-        // await _navigateTo(PlayerMusicFreeView(previewUrl: previewUrl));
+        await _navigateTo(PlayerMusicFreeView(previewUrl: previewUrl));
         break;
     }
   }
@@ -99,6 +99,17 @@ class _GameViewState extends State<GameView> {
   Future<void> _goToError() async {
     if (!mounted) return;
     await _navigateTo(const GameErrorView());
+  }
+
+  Future<void> _goToPreviewUnavailable() async {
+    if (!mounted) return;
+    await _navigateTo(
+      const GameErrorView(
+        title: 'PRÉVIA INDISPONÍVEL',
+        message:
+            'Essa faixa não tem uma prévia de 30 segundos disponível no plano Free. Tente outra carta ou use o Spotify Premium.',
+      ),
+    );
   }
 
   Future<void> _navigateTo(Widget page) async {

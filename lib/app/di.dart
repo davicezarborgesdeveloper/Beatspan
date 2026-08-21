@@ -52,7 +52,7 @@ Future<void> initAppModule() async {
     );
   }
   final clientId = '8e1f4c38cf5543f5929e19c1d503205c';
-  final redirectUrl = 'https://hitster-d8ac4.firebaseapp.com/';
+  final redirectUrl = 'spotify-sdk://auth';
 
   if (!instance.isRegistered<SpotifyService>()) {
     instance.registerLazySingleton<SpotifyService>(

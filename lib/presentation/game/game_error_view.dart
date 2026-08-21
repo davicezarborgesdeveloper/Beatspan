@@ -7,7 +7,15 @@ import '../resource/style_manager.dart';
 import '../share/widgets/scaffold_hitster.dart';
 
 class GameErrorView extends StatefulWidget {
-  const GameErrorView({super.key});
+  final String title;
+  final String message;
+
+  const GameErrorView({
+    super.key,
+    this.title = 'OPS, CÓDIGO QR DESCONHECIDO',
+    this.message =
+        'Você escaneou um QR code que não pertece a nenhuma carta de Beatspan. Tente outra carta do jogo!',
+  });
 
   @override
   State<GameErrorView> createState() => _GameErrorViewState();
@@ -32,7 +40,7 @@ class _GameErrorViewState extends State<GameErrorView> {
               children: [
                 SizedBox(height: 130.0),
                 Text(
-                  'OPS, CÓDIGO QR DESCONHECIDO',
+                  widget.title,
                   style: getMediumStyle(
                     color: ColorManager.white,
                     fontSize: FontSize.s32,
@@ -41,7 +49,7 @@ class _GameErrorViewState extends State<GameErrorView> {
                 ),
                 SizedBox(height: 24.0),
                 Text(
-                  'Você escaneou um QR code que não pertece a nenhuma carta de Beatspan. Tente outra carta do jogo!',
+                  widget.message,
                   style: getMediumStyle(
                     color: ColorManager.white,
                     fontSize: FontSize.s16,

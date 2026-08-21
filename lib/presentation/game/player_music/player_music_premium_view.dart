@@ -6,6 +6,9 @@ import 'package:flutter/services.dart';
 import 'package:spotify_sdk/models/player_state.dart';
 import 'package:spotify_sdk/spotify_sdk.dart';
 
+import '../../../app/di.dart';
+import '../../../data/network/spotify_service.dart';
+
 class PlayerMusicPremiumView extends StatefulWidget {
   final String initialUri;
 
@@ -40,13 +43,12 @@ class _PlayerMusicPremiumViewState extends State<PlayerMusicPremiumView> {
     }
 
     try {
-      // IMPORTANTE: conectar antes de tocar / assinar streams
-      // Se você já faz isso em outro lugar (ex: ConnectSpotifyPremiumView),
-      // pode pular essa parte ou checar conexão antes de conectar de novo.
-      await SpotifySdk.connectToSpotifyRemote(
-        clientId: 'SEU_CLIENT_ID_AQUI',
-        redirectUrl: 'SEU_REDIRECT_URL_AQUI',
-      );
+      // A conexão com o Spotify App Remote normalmente já foi feita em
+      // ConnectSpotifyPremiumView, mas a sessão pode ter caído (app em
+      // background, timeout, etc.) até o usuário chegar nesta tela.
+      // connectToSpotifyRemote é seguro chamar de novo se já conectado.
+      final spotifyService = instance<SpotifyService>();
+      await spotifyService.authorizeAndConnect();
 
       await SpotifySdk.play(spotifyUri: widget.initialUri);
 
