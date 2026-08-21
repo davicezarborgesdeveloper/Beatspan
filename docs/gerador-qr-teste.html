@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Gerador de QR — Teste Beatspan</title>
+<style>
+  body { font-family: system-ui, sans-serif; max-width: 480px; margin: 40px auto; padding: 0 16px; }
+  input { width: 100%; padding: 10px; font-size: 14px; box-sizing: border-box; }
+  button { padding: 10px 16px; font-size: 14px; margin-top: 8px; cursor: pointer; }
+  #qr { margin-top: 20px; }
+  canvas { border: 1px solid #ccc; }
+  p.hint { color: #666; font-size: 13px; }
+</style>
+</head>
+<body>
+<h2>Gerador de QR para testar o Beatspan</h2>
+<p class="hint">Cole o link de uma faixa do Spotify (ex: https://open.spotify.com/track/xxxxx, copiado via "Compartilhar → Copiar link da música").</p>
+<input id="url" type="text" placeholder="https://open.spotify.com/track/...">
+<button onclick="gerar()">Gerar QR Code</button>
+<div id="qr"></div>
+
+<script>
+function gerar() {
+  const url = document.getElementById('url').value.trim();
+  if (!url) return;
+  document.getElementById('qr').innerHTML =
+    '<img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=' + encodeURIComponent(url) + '" alt="QR Code">';
+}
+</script>
+</body>
+</html>

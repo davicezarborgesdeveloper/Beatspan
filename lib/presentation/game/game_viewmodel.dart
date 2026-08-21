@@ -1,15 +1,10 @@
 enum QrValidationResult { invalid, spotifyTrack }
 
 class GameViewModel {
-  static const String _spotifyPrefix =
-      'https://open.spotify.com/intl-pt/track/';
+  static const String _spotifyHost = 'open.spotify.com';
 
   QrValidationResult validate(String rawValue) {
-    final uri = Uri.tryParse(rawValue);
-    final isWebUrl =
-        uri != null && (uri.scheme == 'http' || uri.scheme == 'https');
-
-    final isSpotifyTrack = isWebUrl && rawValue.startsWith(_spotifyPrefix);
+    final isSpotifyTrack = isValidSpotifyLink(rawValue);
     if (!isSpotifyTrack) {
       return QrValidationResult.invalid;
     }
@@ -17,21 +12,24 @@ class GameViewModel {
   }
 
   bool isValidSpotifyLink(String value) {
-    final uri = Uri.tryParse(value);
-    if (uri == null) return false;
-    if (uri.scheme != 'http' && uri.scheme != 'https') return false;
-    return value.startsWith(_spotifyPrefix);
+    return extractTrackId(value) != null;
   }
 
+  /// Aceita links de faixa do Spotify com ou sem prefixo de locale, ex:
+  /// `https://open.spotify.com/track/<id>`
+  /// `https://open.spotify.com/intl-pt/track/<id>`
   String? extractTrackId(String url) {
-    if (!isValidSpotifyLink(url)) return null;
     final uri = Uri.tryParse(url);
     if (uri == null) return null;
+    if (uri.scheme != 'http' && uri.scheme != 'https') return null;
+    if (uri.host != _spotifyHost) return null;
 
     final segments = uri.pathSegments;
-    if (segments.length < 3) return null;
+    final trackIndex = segments.indexOf('track');
+    if (trackIndex == -1 || trackIndex + 1 >= segments.length) return null;
 
-    return segments[2];
+    final id = segments[trackIndex + 1];
+    return id.isEmpty ? null : id;
   }
 
   String? toSpotifyUri(String url) {
