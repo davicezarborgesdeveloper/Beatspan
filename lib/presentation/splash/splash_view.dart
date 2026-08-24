@@ -38,14 +38,14 @@ class _SplashViewState extends State<SplashView> with TickerProviderStateMixin {
     if (_didNavigate || !mounted) return;
     _didNavigate = true;
     _appPreferences.getAppPlanType().then((plan) {
-      if (plan != null) {
-        navigator.pushReplacementNamed(Routes.homeRoute);
-      } else {
-        navigator.pushReplacementNamed(
-          Routes.changeSpotifyRoute,
-          arguments: {'from': Routes.splashRoute},
-        );
-      }
+      // if (plan != null) {
+      //   navigator.pushReplacementNamed(Routes.homeRoute);
+      // } else {
+      //   navigator.pushReplacementNamed(
+      //     Routes.changeSpotifyRoute,
+      //     arguments: {'from': Routes.splashRoute},
+      //   );
+      // }
     });
   }
 

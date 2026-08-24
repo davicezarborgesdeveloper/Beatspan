@@ -55,9 +55,10 @@ class _GameViewState extends State<GameView> {
 
       await _handleSpotifyTrack(value);
     } finally {
-      if (!mounted) return;
-      _isHandlingCode = false;
-      // await qrController.start();
+      if (mounted) {
+        _isHandlingCode = false;
+        // await qrController.start();
+      }
     }
   }
 

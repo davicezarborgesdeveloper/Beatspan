@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:spotify_sdk/models/player_state.dart' hide PlayerState;
 import 'package:just_audio/just_audio.dart';
 
 class PlayerMusicFreeView extends StatefulWidget {
