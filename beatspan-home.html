@@ -1,0 +1,2013 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Beatspan</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0a0a0d;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    min-height: 100vh;
+    padding: 0;
+  }
+
+  .screen {
+    width: 100%;
+    max-width: 380px;
+    margin: 0 auto;
+    color: #fff;
+    padding: 40px 16px;
+  }
+
+  .logo {
+    text-align: center;
+    font-size: 34px;
+    font-weight: 900;
+    letter-spacing: 0.5px;
+    margin-bottom: 24px;
+    background: linear-gradient(90deg, #8b5cf6 0%, #d946ef 50%, #ec4899 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .tag {
+    display: block;
+    text-align: center;
+    margin: 0 auto 24px;
+    width: fit-content;
+    padding: 10px 20px;
+    border: 1px solid #3a2f4a;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #c9b8e8;
+  }
+
+  .field {
+    position: relative;
+    background: #131318;
+    border: 1px solid #2a2a33;
+    border-radius: 16px;
+    margin-bottom: 16px;
+    z-index: 1;
+  }
+
+  .field.open {
+    z-index: 20;
+  }
+
+  .field-header {
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .field-text .label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #8a8a94;
+    text-transform: uppercase;
+  }
+
+  .field-text .value {
+    font-size: 20px;
+    font-weight: 700;
+    margin-top: 4px;
+  }
+
+  .chevron {
+    transition: transform 0.2s ease;
+    color: #b8a8d8;
+    flex-shrink: 0;
+    margin-left: 12px;
+  }
+
+  .field.open .chevron {
+    transform: rotate(180deg);
+  }
+
+  .dropdown-list {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    right: 0;
+    max-height: 0;
+    overflow-y: auto;
+    opacity: 0;
+    visibility: hidden;
+    background: #131318;
+    border: 1px solid #2a2a33;
+    border-radius: 16px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+    transition: max-height 0.25s ease, opacity 0.2s ease;
+  }
+
+  .field.open .dropdown-list {
+    max-height: 320px;
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .option {
+    padding: 12px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  .option:hover {
+    background: #1a1a22;
+  }
+
+  .option.selected {
+    background: #1e1830;
+  }
+
+  .option-native {
+    font-size: 17px;
+    font-weight: 600;
+  }
+
+  .option-en {
+    font-size: 13px;
+    color: #8a8a94;
+    margin-top: 2px;
+  }
+
+  .check {
+    color: #d946ef;
+    flex-shrink: 0;
+  }
+
+  .hint {
+    text-align: center;
+    color: #8a8a94;
+    font-size: 14px;
+    margin: 24px 0 28px;
+  }
+
+  .continue-btn {
+    width: 100%;
+    padding: 18px;
+    border: none;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #7c3aed 0%, #d946ef 55%, #ec4899 100%);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+  }
+
+  .continue-btn:active {
+    transform: scale(0.98);
+  }
+
+  /* ---------- Screen 2: onboarding ---------- */
+
+  #screen-2 {
+    display: none;
+  }
+
+  .back-btn {
+    background: none;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    padding: 4px;
+    margin-bottom: 28px;
+  }
+
+  .onb-title {
+    font-size: 28px;
+    font-weight: 800;
+    line-height: 1.25;
+    margin-bottom: 16px;
+  }
+
+  .onb-subtitle {
+    color: #9a97a3;
+    font-size: 15px;
+    line-height: 1.5;
+    margin-bottom: 48px;
+  }
+
+  .stage {
+    position: relative;
+    height: 260px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 48px;
+  }
+
+  /* scanner (stage 1) */
+  .scanner {
+    position: absolute;
+    width: 220px;
+    height: 220px;
+    opacity: 1;
+    transition: opacity 0.35s ease;
+  }
+
+  .stage.step-2 .scanner,
+  .stage.step-3 .scanner {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .scan-corner {
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    border: 3px solid #ec4899;
+    filter: drop-shadow(0 0 6px #ec4899);
+  }
+  .scan-corner.tl { top: 0; left: 0; border-right: none; border-bottom: none; }
+  .scan-corner.tr { top: 0; right: 0; border-left: none; border-bottom: none; }
+  .scan-corner.bl { bottom: 0; left: 0; border-right: none; border-top: none; }
+  .scan-corner.br { bottom: 0; right: 0; border-left: none; border-top: none; }
+
+  .scan-rings {
+    position: absolute;
+    inset: 30px;
+    border-radius: 50%;
+    animation: spin 6s linear infinite;
+  }
+
+  .scan-rings svg { width: 100%; height: 100%; }
+
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  /* card row (stage 2 + 3) */
+  .card-row {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    opacity: 0;
+    transform: scale(0.9);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+
+  .stage.step-2 .card-row,
+  .stage.step-3 .card-row {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .card {
+    width: 92px;
+    height: 220px;
+    border: 2px solid #3aa8e8;
+    border-radius: 10px;
+    filter: drop-shadow(0 0 6px rgba(58,168,232,0.5));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    overflow: hidden;
+    transition: border-color 0.4s ease, filter 0.4s ease, transform 0.4s ease;
+  }
+
+  .card.side {
+    font-size: 30px;
+    font-weight: 800;
+    color: #3aa8e8;
+  }
+
+  .card.center {
+    width: 130px;
+    position: relative;
+  }
+
+  .card.center .mini-scanner {
+    width: 70px;
+    height: 70px;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+  }
+
+  .card.center .year {
+    font-size: 40px;
+    font-weight: 800;
+    color: #ec4899;
+    opacity: 0;
+    transform: scale(0.6);
+    position: absolute;
+    transition: opacity 0.3s ease 0.1s, transform 0.35s cubic-bezier(.34,1.56,.64,1) 0.1s;
+  }
+
+  .stage.step-3 .card.center {
+    border-color: #ec4899;
+    filter: drop-shadow(0 0 10px rgba(236,72,153,0.7));
+  }
+
+  .stage.step-3 .card.center .mini-scanner {
+    opacity: 0;
+  }
+
+  .stage.step-3 .card.center .year {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .btn-outline {
+    width: 100%;
+    padding: 18px;
+    border: 1px solid #3a2f4a;
+    border-radius: 999px;
+    background: transparent;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    cursor: pointer;
+    margin-top: 14px;
+  }
+
+  .btn-pink {
+    width: 100%;
+    padding: 18px;
+    border: none;
+    border-radius: 999px;
+    background: #ec4899;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    cursor: pointer;
+  }
+
+  /* ---------- Screen 3: Spotify ---------- */
+
+  #screen-3 {
+    display: none;
+  }
+
+  .back-circle {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid #3a3a45;
+    background: none;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin-bottom: 32px;
+  }
+
+  .sp-title {
+    text-align: center;
+    font-size: 19px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-bottom: 20px;
+  }
+
+  .sp-subtitle {
+    text-align: center;
+    color: #9a97a3;
+    font-size: 16px;
+    line-height: 1.5;
+    margin-bottom: 48px;
+  }
+
+  .sp-circle-wrap {
+    position: relative;
+    width: 260px;
+    height: 260px;
+    margin: 0 auto 48px;
+  }
+
+  .sp-circle {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 2px solid #7c3aed;
+    box-shadow: 0 0 24px rgba(124,58,237,0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .sp-bar {
+    width: 6px;
+    background: #fff;
+    border-radius: 3px;
+    animation: bar-bounce 1.1s ease-in-out infinite;
+    transform-origin: center;
+  }
+
+  .sp-bar:nth-child(1) { animation-delay: 0.3s; }
+  .sp-bar:nth-child(2) { animation-delay: 0.1s; }
+  .sp-bar:nth-child(3) { animation-delay: 0s; }
+  .sp-bar:nth-child(4) { animation-delay: 0.2s; }
+  .sp-bar:nth-child(5) { animation-delay: 0.4s; }
+
+  @keyframes bar-bounce {
+    0%, 100% { transform: scaleY(0.5); }
+    50% { transform: scaleY(1); }
+  }
+
+  .sp-note {
+    position: absolute;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #17070f;
+    box-shadow: 0 0 14px rgba(236,72,153,0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ec4899;
+    animation: note-float 2.4s ease-in-out infinite;
+  }
+
+  .sp-note.top { top: -8px; right: 6px; }
+  .sp-note.bottom { bottom: 4px; left: -8px; animation-delay: 1.2s; }
+
+  @keyframes note-float {
+    0%, 100% {
+      transform: translateY(0) scale(1);
+      box-shadow: 0 0 14px rgba(236,72,153,0.6);
+    }
+    50% {
+      transform: translateY(-8px) scale(1.08);
+      box-shadow: 0 0 22px rgba(236,72,153,0.9);
+    }
+  }
+
+  .btn-gradient {
+    width: 100%;
+    padding: 18px;
+    border: none;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #7c3aed 0%, #ec4899 100%);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+    margin-bottom: 14px;
+  }
+
+  .btn-outline-purple {
+    width: 100%;
+    padding: 18px;
+    border: 1px solid #7c3aed;
+    border-radius: 999px;
+    background: transparent;
+    color: #a78bfa;
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+  }
+
+  /* ---------- Screen 4: vire o telefone ---------- */
+
+  #screen-4 {
+    display: none;
+  }
+
+  .close-circle {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #1c1c22;
+    border: none;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin: 0 0 40px auto;
+  }
+
+  .rotate-card {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background: #eef7f6;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 56px;
+    overflow: hidden;
+  }
+
+  .rotate-card svg {
+    width: 78%;
+    animation: tilt-phone 2.2s ease-in-out infinite;
+    transform-origin: center;
+  }
+
+  @keyframes tilt-phone {
+    0%, 100% { transform: rotate(0deg); }
+    50% { transform: rotate(90deg); }
+  }
+
+  .rotate-title {
+    font-size: 40px;
+    font-weight: 900;
+    letter-spacing: 0.5px;
+    margin-bottom: 16px;
+    background: linear-gradient(90deg, #ec4899 0%, #7c3aed 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .rotate-subtitle {
+    color: #9a97a3;
+    font-size: 18px;
+  }
+
+  /* ---------- Screen 5: home do app ---------- */
+
+  #screen-5 {
+    display: none;
+    max-width: 380px;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .app-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 20px 16px;
+  }
+
+  .icon-btn {
+    background: none;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    padding: 4px;
+  }
+
+  .avatar-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #1c1c22;
+    border: 1px solid #2a2a33;
+    padding: 0;
+    cursor: pointer;
+    overflow: hidden;
+  }
+
+  .app-body {
+    padding: 8px 20px 32px;
+  }
+
+  .logo-2 {
+    text-align: center;
+    font-size: 38px;
+    font-weight: 900;
+    letter-spacing: 0.5px;
+    margin-bottom: 24px;
+    background: linear-gradient(90deg, #7c3aed 0%, #ec4899 55%, #f97316 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    filter: drop-shadow(0 0 14px rgba(236,72,153,0.35));
+  }
+
+  .tag-pink {
+    display: block;
+    text-align: center;
+    margin: 0 auto 24px;
+    width: fit-content;
+    padding: 10px 22px;
+    border: 1px solid #5a2a3a;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #f0a8bd;
+  }
+
+  .art-card {
+    background: #131318;
+    border: 1px solid #26262f;
+    border-radius: 16px;
+    padding: 12px;
+    margin-bottom: 28px;
+  }
+
+  .art-frame {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 10px;
+    background:
+      radial-gradient(circle at 30% 30%, rgba(217,70,239,0.35), transparent 55%),
+      radial-gradient(circle at 75% 70%, rgba(59,130,246,0.3), transparent 55%),
+      #0d0d12;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .art-frame svg { width: 68%; }
+
+  .btn-jogar {
+    width: 100%;
+    padding: 18px;
+    border: none;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #7c3aed 0%, #ec4899 55%, #f97316 100%);
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    margin-bottom: 14px;
+  }
+
+  .btn-regras {
+    width: 100%;
+    padding: 18px;
+    border: 1px solid #5a2a3a;
+    border-radius: 999px;
+    background: transparent;
+    color: #f0a8bd;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+  }
+
+  .bottom-nav {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 14px 8px 20px;
+    border-top: 1px solid #1e1e26;
+    background: #0d0d10;
+  }
+
+  .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    color: #8a8a94;
+    font-size: 12px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px 14px;
+  }
+
+  .nav-item svg { width: 22px; height: 22px; }
+
+  .nav-item.active {
+    color: #c9b8f5;
+    background: #1a1626;
+    border-radius: 999px;
+  }
+
+  /* ---------- Screen 6: escanear carta ---------- */
+
+  #screen-6 {
+    display: none;
+    max-width: 380px;
+    width: 100%;
+    min-height: 100vh;
+    margin: 0 auto;
+    background: #000;
+    padding: 24px 20px;
+    color: #fff;
+    cursor: pointer;
+  }
+
+  .scan-topbar {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 40px;
+  }
+
+  .scan-frame {
+    position: relative;
+    width: 100%;
+    max-width: 340px;
+    height: 400px;
+    margin: 0 auto 32px;
+  }
+
+  .scan-mark {
+    position: absolute;
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    background: rgba(124,58,237,0.08);
+    box-shadow: 0 0 18px rgba(124,58,237,0.35);
+  }
+  .scan-mark.tl { top: 0; left: 0; }
+  .scan-mark.tr { top: 0; right: 0; }
+  .scan-mark.bl { bottom: 0; left: 0; }
+  .scan-mark.br { bottom: 0; right: 0; }
+
+  .scan-line {
+    position: absolute;
+    top: 0;
+    left: 22px;
+    right: 22px;
+    height: 2px;
+    background: linear-gradient(90deg, #7c3aed, #ec4899, #f97316);
+    box-shadow: 0 0 10px rgba(236,72,153,0.7);
+    animation: scan-move 2.6s ease-in-out infinite;
+  }
+
+  @keyframes scan-move {
+    0%, 100% { top: 0; }
+    50% { top: 100%; }
+  }
+
+  .scan-corners-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 68px;
+    height: 68px;
+  }
+
+  .scan-corners-center span {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border: 2.5px solid #6a6a75;
+  }
+  .scan-corners-center span.tl { top: 0; left: 0; border-right: none; border-bottom: none; }
+  .scan-corners-center span.tr { top: 0; right: 0; border-left: none; border-bottom: none; }
+  .scan-corners-center span.bl { bottom: 0; left: 0; border-right: none; border-top: none; }
+  .scan-corners-center span.br { bottom: 0; right: 0; border-left: none; border-top: none; }
+
+  .scan-hint {
+    text-align: center;
+    font-size: 20px;
+    line-height: 1.4;
+    color: #eee;
+  }
+
+  /* ---------- Screen 7: revelação da música ---------- */
+
+  #screen-7 {
+    display: none;
+    max-width: 380px;
+    width: 100%;
+    min-height: 100vh;
+    margin: 0 auto;
+    background: #000;
+    padding: 24px 20px 40px;
+    color: #fff;
+  }
+
+  .reveal-topbar {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 24px;
+  }
+
+  .reveal-card {
+    background: #17151c;
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 24px;
+  }
+
+  .reveal-card-top {
+    display: flex;
+    justify-content: flex-end;
+    color: #1ed760;
+    margin-bottom: 14px;
+  }
+
+  .phone-mock {
+    background: #0c0c0f;
+    border-radius: 10px;
+    padding: 10px 14px 16px;
+  }
+
+  .phone-mock-status {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 10px;
+    color: #9a97a3;
+    margin-bottom: 8px;
+  }
+
+  .phone-mock-title {
+    text-align: center;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #ccc;
+    margin-bottom: 10px;
+  }
+
+  .album-art {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 10px;
+  }
+
+  .album-art svg { width: 100%; height: 100%; display: block; }
+
+  .album-caption {
+    text-align: center;
+    margin-bottom: 12px;
+  }
+
+  .album-caption .t1 {
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .album-caption .t2 {
+    font-size: 10px;
+    color: #9a97a3;
+  }
+
+  .phone-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 22px;
+    color: #fff;
+    margin-bottom: 10px;
+  }
+
+  .progress-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #8a8a94;
+  }
+
+  .progress-track {
+    flex: 1;
+    height: 2px;
+    background: #333;
+    border-radius: 2px;
+    position: relative;
+  }
+
+  .progress-track::after {
+    content: "";
+    position: absolute;
+    top: -3px;
+    left: 38%;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #fff;
+  }
+
+  .track-name {
+    font-size: 24px;
+    font-weight: 600;
+    margin: 18px 0 6px;
+  }
+
+  .track-artist-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 26px;
+  }
+
+  .track-artist {
+    font-size: 19px;
+    color: #b8b5bf;
+  }
+
+  .previa-badge {
+    padding: 6px 16px;
+    border: 1px solid #2a8fa8;
+    border-radius: 999px;
+    color: #4fc3d9;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+
+  .reveal-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .save-spotify {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .play-circle {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #fff;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #000;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .btn-proxima {
+    width: 100%;
+    padding: 18px;
+    border: none;
+    border-radius: 999px;
+    background: #7c3aed;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+  }
+
+  /* ---------- Screen 8: revelação premium (às cegas) ---------- */
+
+  #screen-8 {
+    display: none;
+    max-width: 380px;
+    width: 100%;
+    min-height: 100vh;
+    margin: 0 auto;
+    background: #000;
+    padding: 24px 20px 40px;
+    color: #fff;
+  }
+
+  .premium-topbar {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 60px;
+  }
+
+  .premium-card {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    max-width: 340px;
+    margin: 0 auto 48px;
+    border-radius: 22px;
+    background:
+      radial-gradient(circle at 50% 50%, rgba(124,58,237,0.12), transparent 65%),
+      #0c0a10;
+    border: 1px solid #241a30;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .premium-rings {
+    width: 92%;
+    height: 92%;
+    animation: rings-pulse 2.4s ease-in-out infinite;
+  }
+
+  @keyframes rings-pulse {
+    0%, 100% { transform: scale(1); opacity: 0.85; }
+    50% { transform: scale(1.06); opacity: 1; }
+  }
+
+  .premium-play {
+    position: absolute;
+    width: 68px;
+    height: 68px;
+    border-radius: 50%;
+    background: #fff;
+    border: none;
+    color: #17151c;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 0 24px rgba(236,72,153,0.55);
+  }
+
+  .btn-proxima-gradient {
+    width: 100%;
+    padding: 18px;
+    border: none;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #7c3aed 0%, #ec4899 100%);
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+  }
+
+  /* ---------- Screen 9: configurações ---------- */
+
+  #screen-9 {
+    display: none;
+    max-width: 380px;
+    width: 100%;
+    margin: 0 auto;
+    color: #fff;
+  }
+
+  .cfg-topbar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 20px 18px;
+    border-bottom: 1px solid #1e1e26;
+    margin-bottom: 24px;
+  }
+
+  .cfg-title {
+    font-size: 22px;
+    font-weight: 700;
+    background: linear-gradient(90deg, #c9b8f5 0%, #f0a8bd 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .cfg-body {
+    padding: 0 20px 40px;
+  }
+
+  .cfg-section-label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: #8a8a94;
+    margin: 28px 0 12px;
+  }
+
+  .cfg-row {
+    background: #131318;
+    border: 1px solid #24242c;
+    border-radius: 14px;
+    padding: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .cfg-row-text {
+    font-size: 17px;
+    font-weight: 600;
+  }
+
+  .cfg-link-icon {
+    color: #a78bfa;
+    flex-shrink: 0;
+  }
+
+  .cfg-spotify-name {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  .cfg-spotify-badge {
+    color: #1ed760;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+  }
+
+  .cfg-radio-option {
+    background: #131318;
+    border: 1px solid #24242c;
+    border-radius: 14px;
+    padding: 18px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    margin-bottom: 12px;
+    cursor: pointer;
+  }
+
+  .cfg-radio-option.selected {
+    border: 1px solid;
+    border-image: linear-gradient(90deg, #7c3aed, #ec4899) 1;
+    box-shadow: 0 0 14px rgba(217,70,239,0.25);
+  }
+
+  .cfg-radio-dot {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 2px solid #4a4a55;
+    flex-shrink: 0;
+    margin-top: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .cfg-radio-option.selected .cfg-radio-dot {
+    border-color: #d946ef;
+  }
+
+  .cfg-radio-dot::after {
+    content: "";
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #d946ef;
+    display: none;
+  }
+
+  .cfg-radio-option.selected .cfg-radio-dot::after {
+    display: block;
+  }
+
+  .cfg-radio-title {
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .cfg-radio-desc {
+    font-size: 14px;
+    color: #9a97a3;
+    line-height: 1.4;
+  }
+
+  .cfg-toggle-row {
+    background: #131318;
+    border: 1px solid #24242c;
+    border-radius: 14px;
+    padding: 18px;
+  }
+
+  .cfg-toggle-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+
+  .cfg-toggle-title {
+    font-size: 17px;
+    font-weight: 700;
+  }
+
+  .cfg-toggle-desc {
+    font-size: 14px;
+    color: #9a97a3;
+    line-height: 1.4;
+  }
+
+  .switch {
+    width: 46px;
+    height: 26px;
+    border-radius: 999px;
+    background: #3a3a45;
+    border: none;
+    position: relative;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .switch::after {
+    content: "";
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #fff;
+    transition: transform 0.2s ease;
+  }
+
+  .switch.on {
+    background: #7c3aed;
+  }
+
+  .switch.on::after {
+    transform: translateX(20px);
+  }
+
+  .cfg-sublabel {
+    font-size: 13px;
+    color: #8a8a94;
+    margin: 0 0 8px 2px;
+  }
+
+  .cfg-select-row {
+    background: #131318;
+    border: 1px solid #24242c;
+    border-radius: 14px;
+    padding: 16px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  /* ---------- Screen 10: autorização Spotify ---------- */
+
+  #screen-10 {
+    display: none;
+    max-width: 380px;
+    width: 100%;
+    min-height: 100vh;
+    margin: 0 auto;
+    background: #000;
+    color: #fff;
+    padding: 48px 28px 40px;
+    text-align: center;
+  }
+
+  .sp-auth-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 40px;
+  }
+
+  .sp-auth-logo span {
+    font-size: 26px;
+    font-weight: 800;
+  }
+
+  .sp-auth-title {
+    font-size: 27px;
+    font-weight: 800;
+    line-height: 1.3;
+    margin-bottom: 44px;
+  }
+
+  .sp-auth-title .brand {
+    color: #1ed760;
+  }
+
+  .sp-avatar {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    margin: 0 auto 16px;
+    overflow: hidden;
+    background: #2a2a33;
+  }
+
+  .sp-avatar svg { width: 100%; height: 100%; }
+
+  .sp-auth-name {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 44px;
+  }
+
+  .sp-perm {
+    display: flex;
+    gap: 16px;
+    text-align: left;
+    padding: 20px 0;
+    border-top: 1px solid #1e1e26;
+  }
+
+  .sp-perm:last-of-type {
+    border-bottom: 1px solid #1e1e26;
+    margin-bottom: 40px;
+  }
+
+  .sp-perm-icon {
+    color: #fff;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .sp-perm-title {
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .sp-perm-desc {
+    font-size: 14px;
+    color: #9a97a3;
+    line-height: 1.5;
+  }
+
+  .btn-spotify-accept {
+    width: 100%;
+    padding: 18px;
+    border: none;
+    border-radius: 999px;
+    background: #1ed760;
+    color: #000;
+    font-size: 16px;
+    font-weight: 800;
+    cursor: pointer;
+    margin-bottom: 22px;
+  }
+
+  .btn-spotify-cancel {
+    background: none;
+    border: none;
+    color: #9a97a3;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    margin-bottom: 56px;
+  }
+
+  .sp-auth-footer {
+    font-size: 13px;
+    color: #6a6a73;
+    line-height: 1.6;
+    border-top: 1px solid #1e1e26;
+    padding-top: 24px;
+  }
+
+  .sp-auth-footer a {
+    color: #d4d1da;
+    text-decoration: underline;
+  }
+</style>
+</head>
+<body>
+
+<div class="screen" id="screen-1">
+  <div class="logo">BEATSPAN</div>
+  <div class="tag">O JOGO DA FESTA DA MÚSICA</div>
+
+  <div class="field" id="region-field">
+    <div class="field-header" onclick="toggleField('region-field')">
+      <div class="field-text">
+        <div class="label">Região</div>
+        <div class="value" id="region-value">Brasil</div>
+      </div>
+      <svg class="chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+    </div>
+    <div class="dropdown-list" id="region-list"></div>
+  </div>
+
+  <div class="field" id="lang-field">
+    <div class="field-header" onclick="toggleField('lang-field')">
+      <div class="field-text">
+        <div class="label">Idioma</div>
+        <div class="value" id="lang-value">Português</div>
+      </div>
+      <svg class="chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+    </div>
+    <div class="dropdown-list" id="lang-list"></div>
+  </div>
+
+  <p class="hint">Verifique sua região e idioma.</p>
+
+  <button class="continue-btn" onclick="goToScreen2()">
+    CONTINUAR
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+  </button>
+</div>
+
+<div class="screen" id="screen-2">
+  <button class="back-btn" onclick="goToScreen1()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+  </button>
+
+  <div class="onb-title">PRIMEIRA VEZ JOGANDO<br>HITSTER?</div>
+  <p class="onb-subtitle">Comece lendo as regras — depois você estará pronto para escanear sua primeira carta!</p>
+
+  <div class="stage" id="stage">
+    <div class="scanner">
+      <div class="scan-corner tl"></div>
+      <div class="scan-corner tr"></div>
+      <div class="scan-corner bl"></div>
+      <div class="scan-corner br"></div>
+      <div class="scan-rings">
+        <svg viewBox="0 0 160 160">
+          <circle cx="80" cy="80" r="70" fill="none" stroke="#3aa8e8" stroke-width="1.5" opacity="0.5"/>
+          <circle cx="80" cy="80" r="58" fill="none" stroke="#3aa8e8" stroke-width="1.5" opacity="0.7"/>
+          <circle cx="80" cy="80" r="46" fill="none" stroke="#3aa8e8" stroke-width="2"/>
+          <circle cx="58" cy="62" r="9" fill="none" stroke="#3aa8e8" stroke-width="2"/>
+          <circle cx="102" cy="62" r="9" fill="none" stroke="#3aa8e8" stroke-width="2"/>
+          <circle cx="58" cy="100" r="9" fill="none" stroke="#3aa8e8" stroke-width="2"/>
+          <path d="M75 85 L85 85 L85 100 L95 100" fill="none" stroke="#3aa8e8" stroke-width="2"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="card-row">
+      <div class="card side">983</div>
+      <div class="card center">
+        <div class="mini-scanner">
+          <svg viewBox="0 0 160 160">
+            <circle cx="80" cy="80" r="70" fill="none" stroke="#3aa8e8" stroke-width="1.5" opacity="0.5"/>
+            <circle cx="80" cy="80" r="58" fill="none" stroke="#3aa8e8" stroke-width="1.5" opacity="0.7"/>
+            <circle cx="80" cy="80" r="46" fill="none" stroke="#3aa8e8" stroke-width="2"/>
+            <circle cx="58" cy="62" r="9" fill="none" stroke="#3aa8e8" stroke-width="2"/>
+            <circle cx="102" cy="62" r="9" fill="none" stroke="#3aa8e8" stroke-width="2"/>
+            <circle cx="58" cy="100" r="9" fill="none" stroke="#3aa8e8" stroke-width="2"/>
+          </svg>
+        </div>
+        <div class="year">1999</div>
+      </div>
+      <div class="card side">200X</div>
+    </div>
+  </div>
+
+  <button class="btn-pink">LER AS REGRAS</button>
+  <button class="btn-outline" onclick="goToScreen3()">CONTINUAR</button>
+</div>
+
+<div class="screen" id="screen-3">
+  <button class="back-circle" onclick="goToScreen2back()">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+  </button>
+
+  <div class="sp-title">CONEXÃO SPOTIFY PREMIUM</div>
+  <p class="sp-subtitle">Se você tem uma conta Spotify Premium, conecte o app ao Beatspan. Certifique-se de que o app está instalado no dispositivo.</p>
+
+  <div class="sp-circle-wrap">
+    <div class="sp-circle">
+      <div class="sp-bar" style="height:14px"></div>
+      <div class="sp-bar" style="height:34px"></div>
+      <div class="sp-bar" style="height:56px"></div>
+      <div class="sp-bar" style="height:34px"></div>
+      <div class="sp-bar" style="height:14px"></div>
+    </div>
+    <div class="sp-note top">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
+    </div>
+    <div class="sp-note bottom">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
+    </div>
+  </div>
+
+  <button class="btn-gradient" onclick="goToScreen10()">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="4" y1="10" x2="4" y2="14"></line><line x1="9" y1="6" x2="9" y2="18"></line><line x1="14" y1="9" x2="14" y2="15"></line><line x1="19" y1="7" x2="19" y2="17"></line></svg>
+    LIGAR COM SPOTIFY
+  </button>
+  <button class="btn-outline-purple" onclick="isPremium=false; goToScreen4()">NÃO TENHO SPOTIFY PREMIUM</button>
+</div>
+
+<div class="screen" id="screen-4">
+  <button class="close-circle" onclick="goToScreen3back()">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+  </button>
+
+  <div class="rotate-card">
+    <svg viewBox="0 0 200 240" fill="none">
+      <rect x="60" y="30" width="80" height="160" rx="14" stroke="#5ee6dc" stroke-width="4" fill="#2a1240"/>
+      <circle cx="72" cy="46" r="4" fill="none" stroke="#5ee6dc" stroke-width="2.5"/>
+      <path d="M110 130 Q104 145 116 150 Q128 155 122 165 Q116 175 128 175" stroke="#ec4899" stroke-width="3" stroke-linecap="round" fill="none"/>
+      <circle cx="104" cy="150" r="7" stroke="#ec4899" stroke-width="3" fill="none"/>
+      <circle cx="120" cy="168" r="7" stroke="#ec4899" stroke-width="3" fill="none"/>
+      <path d="M140 60 L170 40 L170 90" stroke="#ec4899" stroke-width="3" stroke-linecap="round" fill="none"/>
+      <circle cx="163" cy="92" r="7" stroke="#ec4899" stroke-width="3" fill="none"/>
+      <path d="M148 75 Q158 70 165 78" stroke="#ec4899" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+      <path d="M144 95 Q154 90 161 98" stroke="#ec4899" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+      <path d="M50 90 Q40 100 50 110" stroke="#ec4899" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+      <path d="M46 105 Q34 118 46 130" stroke="#ec4899" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+    </svg>
+  </div>
+
+  <div class="rotate-title">VIRE O TELEFONE</div>
+  <p class="rotate-subtitle">Então a música começará...</p>
+
+  <div style="margin-top: 40px;">
+    <button class="btn-pink">LER AS REGRAS</button>
+    <button class="btn-outline" onclick="goToScreen5()">CONTINUAR</button>
+  </div>
+</div>
+
+<div id="screen-5">
+  <div class="app-topbar">
+    <button class="icon-btn" aria-label="Menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <button class="avatar-btn" aria-label="Perfil">
+      <svg width="40" height="40" viewBox="0 0 40 40"><rect width="40" height="40" fill="#241a33"/><circle cx="20" cy="16" r="6" fill="#7c3aed"/><path d="M8 34c0-8 24-8 24 0" fill="#7c3aed"/></svg>
+    </button>
+  </div>
+
+  <div class="app-body">
+    <div class="logo-2">BEATSPAN</div>
+    <div class="tag-pink">O JOGO DA FESTA DA MÚSICA</div>
+
+    <div class="art-card">
+      <div class="art-frame">
+        <svg viewBox="0 0 200 200" fill="none">
+          <rect x="20" y="20" width="160" height="160" rx="14" fill="#1a1a22" stroke="#3a3a45" stroke-width="3"/>
+          <circle cx="100" cy="100" r="66" fill="#111116" stroke="#4a4a55" stroke-width="3"/>
+          <circle cx="100" cy="100" r="50" fill="#1c1c24" stroke="#5a5a66" stroke-width="2"/>
+          <circle cx="100" cy="100" r="34" fill="url(#speakerGlow)" stroke="#6a6a77" stroke-width="2"/>
+          <circle cx="100" cy="100" r="9" fill="#0a0a0d"/>
+          <circle cx="32" cy="32" r="4" fill="#8a8a94"/>
+          <circle cx="168" cy="32" r="4" fill="#8a8a94"/>
+          <circle cx="32" cy="168" r="4" fill="#8a8a94"/>
+          <circle cx="168" cy="168" r="4" fill="#8a8a94"/>
+          <defs>
+            <radialGradient id="speakerGlow" cx="0.4" cy="0.4" r="0.7">
+              <stop offset="0%" stop-color="#ec4899"/>
+              <stop offset="100%" stop-color="#3b0764"/>
+            </radialGradient>
+          </defs>
+        </svg>
+      </div>
+    </div>
+
+    <button class="btn-jogar" onclick="goToScreen6()">JOGAR AGORA</button>
+    <button class="btn-regras" onclick="goToScreen9()">REGRAS E CONFIGURAÇÕES</button>
+  </div>
+
+  <div class="bottom-nav">
+    <button class="nav-item active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"></path><path d="M5 10v10h14V10"></path></svg>
+      Home
+    </button>
+    <button class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect><line x1="17" y1="17" x2="17" y2="17"></line><line x1="21" y1="17" x2="21" y2="21"></line><line x1="17" y1="21" x2="17" y2="21"></line></svg>
+      Scan
+    </button>
+    <button class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"></circle><path d="M3 20c0-4 3-6 6-6s6 2 6 6"></path><circle cx="17" cy="9" r="2.5"></circle><path d="M15.5 14c2.5 0 4.5 2 4.5 5"></path></svg>
+      Lobby
+    </button>
+    <button class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-5 4-8 8-8s8 3 8 8"></path></svg>
+      Profile
+    </button>
+  </div>
+</div>
+
+<div id="screen-6" onclick="goToScreen7()">
+  <div class="scan-topbar">
+    <button class="close-circle" onclick="event.stopPropagation(); goToScreen5back()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    </button>
+  </div>
+
+  <div class="scan-frame">
+    <div class="scan-mark tl"></div>
+    <div class="scan-mark tr"></div>
+    <div class="scan-mark bl"></div>
+    <div class="scan-mark br"></div>
+    <div class="scan-line"></div>
+    <div class="scan-corners-center">
+      <span class="tl"></span>
+      <span class="tr"></span>
+      <span class="bl"></span>
+      <span class="br"></span>
+    </div>
+  </div>
+
+  <p class="scan-hint">Escaneie o verso da próxima<br>carta Beatspan</p>
+</div>
+
+<div id="screen-7">
+  <div class="reveal-topbar">
+    <button class="close-circle" onclick="goToScreen5back()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    </button>
+  </div>
+
+  <div class="reveal-card">
+    <div class="reveal-card-top">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="12"/><path d="M6 10c4-1 9-1 12.5 1" stroke="#17151c" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M6.5 13c3.3-.9 7.5-.7 10.5 1" stroke="#17151c" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M7 16c2.8-.7 6-.6 8.5.8" stroke="#17151c" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg>
+    </div>
+
+    <div class="phone-mock">
+      <div class="phone-mock-status">
+        <span>22:47</span>
+        <span>83%</span>
+      </div>
+      <div class="phone-mock-title">SONG REVEAL</div>
+      <div class="album-art">
+        <svg viewBox="0 0 200 200" preserveAspectRatio="xMidYMid slice">
+          <defs>
+            <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#160a2e"/>
+              <stop offset="60%" stop-color="#3a0f4a"/>
+              <stop offset="100%" stop-color="#ec4899"/>
+            </linearGradient>
+            <linearGradient id="sunGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#f97316"/>
+              <stop offset="100%" stop-color="#ec4899"/>
+            </linearGradient>
+          </defs>
+          <rect width="200" height="200" fill="url(#skyGrad)"/>
+          <circle cx="100" cy="120" r="40" fill="url(#sunGrad)" opacity="0.85"/>
+          <rect x="0" y="140" width="200" height="60" fill="#0c0616"/>
+          <rect x="20" y="80" width="14" height="80" fill="#1a0e2e"/>
+          <rect x="40" y="60" width="16" height="100" fill="#1a0e2e"/>
+          <rect x="150" y="70" width="16" height="90" fill="#1a0e2e"/>
+          <rect x="168" y="55" width="14" height="105" fill="#1a0e2e"/>
+          <rect x="60" y="40" width="18" height="120" fill="#150a26"/>
+          <rect x="120" y="50" width="20" height="110" fill="#150a26"/>
+          <rect x="90" y="30" width="20" height="130" fill="#100720"/>
+          <rect x="63" y="46" width="3" height="6" fill="#5ee6dc"/>
+          <rect x="70" y="56" width="3" height="6" fill="#ec4899"/>
+          <rect x="63" y="66" width="3" height="6" fill="#5ee6dc"/>
+          <rect x="124" y="56" width="3" height="6" fill="#5ee6dc"/>
+          <rect x="132" y="66" width="3" height="6" fill="#ec4899"/>
+          <rect x="94" y="36" width="3" height="6" fill="#ec4899"/>
+          <rect x="102" y="46" width="3" height="6" fill="#5ee6dc"/>
+          <line x1="0" y1="196" x2="200" y2="196" stroke="#ec4899" stroke-width="2" opacity="0.6"/>
+          <line x1="0" y1="184" x2="200" y2="184" stroke="#7c3aed" stroke-width="1.5" opacity="0.5"/>
+        </svg>
+      </div>
+      <div class="album-caption">
+        <div class="t1">NEON SUNSET</div>
+        <div class="t2">VECTOR SYNC</div>
+      </div>
+      <div class="phone-controls">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M11 5L2 12l9 7V5zM22 5l-9 7 9 7V5z"/></svg>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14"/><rect x="14" y="5" width="4" height="14"/></svg>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M13 5l9 7-9 7V5zM2 5l9 7-9 7V5z"/></svg>
+      </div>
+      <div class="progress-row">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M3 10v4h4l5 5V5L7 10H3z"/></svg>
+        <div class="progress-track"></div>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M3 10v4h4l5 5V5L7 10H3z"/><path d="M16 8a5 5 0 010 8" stroke="currentColor" stroke-width="1.6" fill="none"/></svg>
+      </div>
+    </div>
+  </div>
+
+  <div class="track-name">Blinding Lights</div>
+  <div class="track-artist-row">
+    <span class="track-artist">The Weeknd</span>
+    <span class="previa-badge">PRÉVIA</span>
+  </div>
+
+  <div class="reveal-actions">
+    <button class="save-spotify">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+      SALVAR NO SPOTIFY
+    </button>
+    <button class="play-circle" aria-label="Tocar">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"></path></svg>
+    </button>
+  </div>
+
+  <div style="margin-top: 40px;">
+    <button class="btn-proxima" onclick="goToScreen6back()">
+      PRÓXIMA CARTA
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+    </button>
+  </div>
+</div>
+
+<div id="screen-8">
+  <div class="premium-topbar">
+    <button class="close-circle" onclick="goToScreen5back()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    </button>
+  </div>
+
+  <div class="premium-card">
+    <svg class="premium-rings" viewBox="0 0 200 200" fill="none">
+      <g stroke-linecap="round" stroke-width="4">
+        <path d="M100 12 A88 88 0 0 1 172 55" stroke="#7c3aed"/>
+        <path d="M188 100 A88 88 0 0 1 155 172" stroke="#9333ea"/>
+        <path d="M100 188 A88 88 0 0 1 28 155" stroke="#c026a3"/>
+        <path d="M12 100 A88 88 0 0 1 45 28" stroke="#db2777"/>
+        <path d="M100 30 A70 70 0 0 1 154 58" stroke="#8b3fe8"/>
+        <path d="M170 100 A70 70 0 0 1 142 154" stroke="#a531c9"/>
+        <path d="M100 170 A70 70 0 0 1 46 142" stroke="#c62590"/>
+        <path d="M30 100 A70 70 0 0 1 58 46" stroke="#e11d75"/>
+        <path d="M100 48 A52 52 0 0 1 136 62" stroke="#9945e8"/>
+        <path d="M152 100 A52 52 0 0 1 138 136" stroke="#b52ab2"/>
+        <path d="M100 152 A52 52 0 0 1 64 138" stroke="#cf2382"/>
+        <path d="M48 100 A52 52 0 0 1 62 64" stroke="#e91e63"/>
+      </g>
+    </svg>
+    <button class="premium-play" aria-label="Pausar" onclick="event.stopPropagation()">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"></rect><rect x="14" y="5" width="4" height="14" rx="1"></rect></svg>
+    </button>
+  </div>
+
+  <button class="btn-proxima-gradient" onclick="goToScreen6back()">
+    PRÓXIMA CARTA
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+  </button>
+</div>
+
+<div id="screen-9">
+  <div class="cfg-topbar">
+    <button class="back-btn" style="margin-bottom:0;" onclick="goToScreen5back()">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+    </button>
+    <div class="cfg-title">Configurações</div>
+  </div>
+
+  <div class="cfg-body">
+    <div class="cfg-section-label">GERAL</div>
+    <div class="cfg-row">
+      <span class="cfg-row-text">Perguntas frequentes</span>
+      <svg class="cfg-link-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+    </div>
+
+    <div class="cfg-section-label">CONFIGURAÇÕES DO SPOTIFY</div>
+    <div class="cfg-row">
+      <span class="cfg-spotify-name">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="#1ed760"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
+        Spotify
+      </span>
+      <span class="cfg-spotify-badge" id="spotify-badge">PREMIUM</span>
+    </div>
+
+    <div class="cfg-section-label">MODO DE JOGO</div>
+    <div class="cfg-radio-option selected" id="mode-full" onclick="selectMode('full')">
+      <div class="cfg-radio-dot"></div>
+      <div>
+        <div class="cfg-radio-title">Faixas completas</div>
+        <div class="cfg-radio-desc">Reproduza a faixa inteira desde o início. Requer Spotify Premium.</div>
+      </div>
+    </div>
+    <div class="cfg-radio-option" id="mode-preview" onclick="selectMode('preview')">
+      <div class="cfg-radio-dot"></div>
+      <div>
+        <div class="cfg-radio-title">Pré-escuta de 30s</div>
+        <div class="cfg-radio-desc">Reproduza pré-escutas de 30 segundos. Não requer Spotify Premium.</div>
+      </div>
+    </div>
+
+    <div class="cfg-section-label">VIRE O TELEFONE</div>
+    <div class="cfg-toggle-row">
+      <div class="cfg-toggle-head">
+        <span class="cfg-toggle-title">Usar Vire o Telefone</span>
+        <button class="switch" id="flip-switch" onclick="this.classList.toggle('on')"></button>
+      </div>
+      <p class="cfg-toggle-desc">Após escanear uma carta, coloque o dispositivo virado para baixo. Isso oculta detalhes da faixa e mantém o jogo justo.</p>
+    </div>
+
+    <div class="cfg-section-label">CONFIGURAÇÕES DO APP</div>
+    <p class="cfg-sublabel">Altere o país</p>
+    <div class="cfg-select-row">
+      Brasil
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+    </div>
+    <p class="cfg-sublabel">Altere o idioma</p>
+    <div class="cfg-select-row">
+      Português
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+    </div>
+  </div>
+</div>
+
+<div id="screen-10">
+  <div class="sp-auth-logo">
+    <svg width="34" height="34" viewBox="0 0 24 24" fill="#1ed760"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
+    <span>Spotify</span>
+  </div>
+
+  <div class="sp-auth-title">
+    Permitir que o Spotify<br>se conecte a:<br>
+    <span class="brand">Beatspan</span>
+  </div>
+
+  <div class="sp-avatar">
+    <svg viewBox="0 0 96 96"><rect width="96" height="96" fill="#3a2f52"/><circle cx="48" cy="38" r="18" fill="#8a7bb0"/><path d="M14 90c0-20 15-32 34-32s34 12 34 32" fill="#8a7bb0"/></svg>
+  </div>
+  <div class="sp-auth-name">Alex Smith</div>
+
+  <div class="sp-perm">
+    <svg class="sp-perm-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+    <div>
+      <div class="sp-perm-title">Ver os dados da sua conta do Spotify</div>
+      <div class="sp-perm-desc">Seu nome, nome de usuário, foto do perfil, seguidores do Spotify e playlists públicas.</div>
+    </div>
+  </div>
+
+  <div class="sp-perm">
+    <svg class="sp-perm-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"></path><path d="M14 2v6h6"></path><path d="M12 18l3-3-1.5-1.5L12 15l-1.5-1.5L9 15z"></path></svg>
+    <div>
+      <div class="sp-perm-title">Realizar ações no Spotify em seu nome</div>
+      <div class="sp-perm-desc">Reproduzir e controlar o Spotify no aplicativo Beatspan.</div>
+    </div>
+  </div>
+
+  <button class="btn-spotify-accept" onclick="goToScreen5(true)">Aceito</button>
+  <button class="btn-spotify-cancel" onclick="goToScreen3fromAuth()">CANCELAR</button>
+
+  <div class="sp-auth-footer">
+    Você pode remover este acesso a qualquer momento em spotify.com/account.<br><br>
+    <a href="#" onclick="return false;">Política de Privacidade</a>
+  </div>
+</div>
+
+<script>
+  const regions = [
+    { native: "Austrália", en: "Australia" },
+    { native: "Bélgica", en: "Belgium" },
+    { native: "Brasil", en: "Brazil" },
+    { native: "Canadá", en: "Canada" },
+    { native: "República Tcheca", en: "Czech Republic" },
+    { native: "Chile", en: "Chile" },
+    { native: "Costa Rica", en: "Costa Rica" }
+  ];
+
+  const languages = [
+    { native: "Português", en: "Portuguese" },
+    { native: "English", en: "English" },
+    { native: "Español", en: "Spanish" }
+  ];
+
+  function renderList(listId, items, selectedNative, onSelect) {
+    const list = document.getElementById(listId);
+    list.innerHTML = "";
+    items.forEach(item => {
+      const opt = document.createElement("div");
+      opt.className = "option" + (item.native === selectedNative ? " selected" : "");
+      opt.innerHTML = `
+        <div>
+          <div class="option-native">${item.native}</div>
+          <div class="option-en">${item.en}</div>
+        </div>
+        ${item.native === selectedNative ? '<svg class="check" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>' : ''}
+      `;
+      opt.onclick = (e) => {
+        e.stopPropagation();
+        onSelect(item.native);
+      };
+      list.appendChild(opt);
+    });
+  }
+
+  function selectRegion(native) {
+    document.getElementById("region-value").textContent = native;
+    renderList("region-list", regions, native, selectRegion);
+    document.getElementById("region-field").classList.remove("open");
+  }
+
+  function selectLang(native) {
+    document.getElementById("lang-value").textContent = native;
+    renderList("lang-list", languages, native, selectLang);
+    document.getElementById("lang-field").classList.remove("open");
+  }
+
+  function toggleField(id) {
+    const field = document.getElementById(id);
+    const otherId = id === "region-field" ? "lang-field" : "region-field";
+    document.getElementById(otherId).classList.remove("open");
+    field.classList.toggle("open");
+  }
+
+  renderList("region-list", regions, "Brasil", selectRegion);
+  renderList("lang-list", languages, "Português", selectLang);
+
+  document.addEventListener("click", (e) => {
+    if (!e.target.closest("#region-field")) {
+      document.getElementById("region-field").classList.remove("open");
+    }
+    if (!e.target.closest("#lang-field")) {
+      document.getElementById("lang-field").classList.remove("open");
+    }
+  });
+
+  let stageTimers = [];
+
+  function playStageAnimation() {
+    const stage = document.getElementById("stage");
+    stage.classList.remove("step-2", "step-3");
+    stageTimers.forEach(t => clearTimeout(t));
+    stageTimers = [];
+
+    stageTimers.push(setTimeout(() => stage.classList.add("step-2"), 1100));
+    stageTimers.push(setTimeout(() => stage.classList.add("step-3"), 2300));
+  }
+
+  const ALL_SCREENS = ["screen-1","screen-2","screen-3","screen-4","screen-5","screen-6","screen-7","screen-8","screen-9","screen-10"];
+
+  function showScreen(id) {
+    ALL_SCREENS.forEach(s => {
+      document.getElementById(s).style.display = "none";
+    });
+    document.getElementById(id).style.display = "block";
+  }
+
+  function goToScreen2() {
+    showScreen("screen-2");
+    playStageAnimation();
+  }
+
+  function goToScreen1() {
+    showScreen("screen-1");
+  }
+
+  function goToScreen3() {
+    showScreen("screen-3");
+  }
+
+  function goToScreen2back() {
+    showScreen("screen-2");
+  }
+
+  function goToScreen4() {
+    showScreen("screen-4");
+  }
+
+  function goToScreen3back() {
+    showScreen("screen-3");
+  }
+
+  let isPremium = false;
+
+  function goToScreen5(premium) {
+    if (typeof premium === "boolean") isPremium = premium;
+    showScreen("screen-5");
+  }
+
+  function goToScreen6() {
+    showScreen("screen-6");
+  }
+
+  function goToScreen7() {
+    showScreen(isPremium ? "screen-8" : "screen-7");
+  }
+
+  function goToScreen6back() {
+    showScreen("screen-6");
+  }
+
+  function goToScreen5back() {
+    showScreen("screen-5");
+  }
+
+  function goToScreen9() {
+    showScreen("screen-9");
+    document.getElementById("spotify-badge").textContent = isPremium ? "PREMIUM" : "GRATUITO";
+    document.getElementById("spotify-badge").style.color = isPremium ? "#1ed760" : "#8a8a94";
+  }
+
+  function selectMode(mode) {
+    document.getElementById("mode-full").classList.toggle("selected", mode === "full");
+    document.getElementById("mode-preview").classList.toggle("selected", mode === "preview");
+  }
+
+  function goToScreen10() {
+    showScreen("screen-10");
+  }
+
+  function goToScreen3fromAuth() {
+    showScreen("screen-3");
+  }
+</script>
+
+</body>
+</html>
