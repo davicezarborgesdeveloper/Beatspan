@@ -1,0 +1,17 @@
+scripts:
+  get: flutter pub get
+  clean: flutter clean
+
+  run: flutter run
+  run:release: flutter run --release
+
+  build:apk: flutter build apk --release
+  build:appbundle: flutter build appbundle --release
+
+  test: flutter test
+  analyze: flutter analyze
+  format: dart format .
+
+  icons: dart run flutter_launcher_icons -f flutter_launcher_icons.yaml
+  splash: dart run flutter_native_splash:create
+ 

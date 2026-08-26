@@ -107,3 +107,5 @@ Projeto em desenvolvimento ativo. Pontos conhecidos em aberto:
 - Sem testes automatizados além do boilerplate padrão do Flutter.
 
 Consulte [docs/ESTADO-ATUAL.md](docs/ESTADO-ATUAL.md) para o detalhamento completo.
+
+# dart run flutter_launcher_icons:generate -f flutter_launcher_icons.yaml --overwrite
