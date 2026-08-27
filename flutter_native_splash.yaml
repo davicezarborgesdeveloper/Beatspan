@@ -1,2 +1,21 @@
 flutter_native_splash:
-  color: "#000000"
+  # Fundo sólido — usando o roxo escuro da paleta do Beatspan
+  color: "#1A1025"
+  color_dark: "#0D0812"
+
+  # Só o símbolo "B", sem texto — vai no centro
+  image: assets/images/splash/beatspan_icon.png
+  image_dark: assets/images/splash/beatspan_icon.png
+
+  # Android 12+ tem API própria e mais restritiva
+  android_12:
+    color: "#1A1025"
+    color_dark: "#0D0812"
+    image: assets/images/splash/beatspan_icon_android12.png
+    image_dark: assets/images/splash/beatspan_icon_android12.png
+    icon_background_color: "#1A1025"
+    icon_background_color_dark: "#0D0812"
+
+  android: true
+  ios: true
+  web: false  # geralmente não precisa pra web
