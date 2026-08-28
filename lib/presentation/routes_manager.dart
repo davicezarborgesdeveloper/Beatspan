@@ -35,6 +35,11 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const FirstTimeView());
       case Routes.rulesRoute:
         return MaterialPageRoute(builder: (_) => const RulesView());
+      case Routes.changeSpotifyRoute:
+        return MaterialPageRoute(
+          settings: routeSettings,
+          builder: (_) => const ChangeSpotifyView(),
+        );  
       case Routes.homeRoute:
         return MaterialPageRoute(builder: (_) => const HomeView());
       case Routes.faqRoute:
@@ -43,12 +48,7 @@ class RouteGenerator {
       case Routes.settingsRoute:
         return MaterialPageRoute(builder: (_) => const SettingsView());
       case Routes.contactRoute:
-        return MaterialPageRoute(builder: (_) => const ContactView());
-      case Routes.changeSpotifyRoute:
-        return MaterialPageRoute(
-          settings: routeSettings,
-          builder: (_) => const ChangeSpotifyView(),
-        );
+        return MaterialPageRoute(builder: (_) => const ContactView());    
       case Routes.changeSpotifyPremiumRoute:
         return MaterialPageRoute(
           builder: (_) => const ConnectSpotifyPremiumView(),

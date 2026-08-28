@@ -140,33 +140,6 @@ class _SplashViewState extends State<SplashView>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0XFF08050D),
-      // floatingActionButton: Row(
-      //   mainAxisAlignment: MainAxisAlignment.end,
-      //   children: [
-      //     FloatingActionButton(
-      //       heroTag: 'play',
-      //       onPressed: () {
-      //         _didNavigate = false;
-      //         _c.reset();
-      //         _c.forward().whenComplete(() {
-      //           _goNext();
-      //           _c.reset();
-      //         });
-      //       },
-      //       child: const Icon(Icons.play_arrow),
-      //     ),
-      //     const SizedBox(width: 12),
-      //     FloatingActionButton(
-      //       heroTag: 'pauseMiddle',
-      //       onPressed: () {
-      //         _didNavigate =
-      //             true; // segura a navegação enquanto paramos no meio
-      //         _c.animateTo(_middleStage);
-      //       },
-      //       child: const Icon(Icons.pause),
-      //     ),
-      //   ],
-      // ),
       body: AnimatedBuilder(
         animation: _c,
         builder: (context, _) {
