@@ -1,11 +1,8 @@
-import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
 import '../../app/app_prefs.dart';
 import '../../app/di.dart';
 import '../resource/assets_manager.dart';
 import '../resource/screen_manager.dart';
-import '../resource/value_manager.dart';
 import '../routes_manager.dart';
 import 'widgets/loading_dots.dart';
 
@@ -38,9 +35,6 @@ class _SplashViewState extends State<SplashView>
 
   static const totalMs = 3700;
 
-  // Ponto em que todos os elementos já apareceram e a saída ainda não começou.
-  static const double _middleStage = 0.38;
-
   bool _didNavigate = false;
 
   void _goNext() async {
@@ -52,10 +46,7 @@ class _SplashViewState extends State<SplashView>
       if (plan != null) {
         navigator.pushReplacementNamed(Routes.homeRoute);
       } else {
-        navigator.pushReplacementNamed(
-          Routes.changeSpotifyRoute,
-          arguments: {'from': Routes.splashRoute},
-        );
+        navigator.pushReplacementNamed(Routes.firstTimeRoute);
       }
     });
   }
@@ -251,7 +242,7 @@ class _SplashViewState extends State<SplashView>
                   children: [
                     Opacity(
                       opacity: _dotsExitOpacity.value,
-                      child:LoadingDots(controller: _c),
+                      child: LoadingDots(controller: _c),
                     ),
                     SizedBox(height: 16),
                     Text(

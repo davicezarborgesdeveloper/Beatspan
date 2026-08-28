@@ -25,8 +25,8 @@ class _RulesViewState extends State<RulesView> {
         titleSpacing: 0,
         leadingWidth: 40,
         title: SizedBox(
-          width: context.percentWidth(.3),
-          child: Image.asset(ImageAssets.logoSplash),
+          width: context.percentWidth(.5),
+          child: Image.asset(ImageAssets.splashWordmark),
         ),
       ),
       body: SingleChildScrollView(

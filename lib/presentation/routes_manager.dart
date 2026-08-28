@@ -4,22 +4,25 @@ import '../app/di.dart';
 import 'change_spotify/change_spotify_view.dart';
 import 'connect_spotify_premium/connect_spotify_premium_view.dart';
 import 'contact/contact_view.dart';
-import 'country/country_view.dart';
 import 'faqs/faqs_view.dart';
+import 'first_time/first_time_view.dart';
 import 'home/home_view.dart';
 import 'language/language_view.dart';
+import 'rules/rules_view.dart';
 import 'settings/settings_view.dart';
 import 'splash/splash_view.dart';
 
 class Routes {
   static const String splashRoute = '/splash';
+  static const String firstTimeRoute = '/first';
+  static const String rulesRoute = '/rules';
+
   static const String homeRoute = '/home';
   static const String faqRoute = '/faq';
   static const String settingsRoute = '/settings';
   static const String contactRoute = '/contact';
   static const String changeSpotifyRoute = '/change-spotify';
   static const String changeSpotifyPremiumRoute = '/connect-spotify-premium';
-  static const String countryRoute = '/country';
   static const String languageRoute = '/language';
 }
 
@@ -28,10 +31,10 @@ class RouteGenerator {
     switch (routeSettings.name) {
       case Routes.splashRoute:
         return MaterialPageRoute(builder: (_) => const SplashView());
-      case Routes.countryRoute:
-        return MaterialPageRoute(builder: (_) => const CountryView());
-      case Routes.languageRoute:
-        return MaterialPageRoute(builder: (_) => const LanguageView());
+      case Routes.firstTimeRoute:
+        return MaterialPageRoute(builder: (_) => const FirstTimeView());
+      case Routes.rulesRoute:
+        return MaterialPageRoute(builder: (_) => const RulesView());
       case Routes.homeRoute:
         return MaterialPageRoute(builder: (_) => const HomeView());
       case Routes.faqRoute:

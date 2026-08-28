@@ -10,6 +10,7 @@ class ColorManager {
 
   static Color black = HexColor.fromHex('#000000');
   static Color white = HexColor.fromHex('#FFFFFF');
+  static Color bagroundColor = HexColor.fromHex('#08050D');
 
   static Color yellowLink = HexColor.fromHex('#FFC850');
   static Color warning = HexColor.fromHex('#E32636');
