@@ -29,7 +29,7 @@ class _ChangeSpotifyViewState extends State<ChangeSpotifyView> {
             padding: const EdgeInsets.only(left: 16),
             child: Container(
               decoration: BoxDecoration(
-                shape: BoxShape.circle,
+                shape: BoxShape.circle, 
                 border: Border.all(width: 1, color: Color(0X33CDBDFF)),
               ),
               child: Icon(Icons.arrow_back, color: Colors.white),
@@ -38,84 +38,98 @@ class _ChangeSpotifyViewState extends State<ChangeSpotifyView> {
         ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Column(
+          child: Stack(
             children: [
-              SizedBox(height: 8),
-              Text(
-                'CONEXÃO SPOTIFY PREMIUM',
-                style: TextStyle(fontSize: 16, color: Color(0XFFF8F7FC)),
-              ),
-              SizedBox(height: 16),
-              Text(
-                'Se você tem uma conta Spotify Premium, conecte o app ao Beatspan. Certifique-se de que o app está instalado no dispositivo.',
-                style: TextStyle(color: Color(0XB3F8F7FC)),
-              ),
-              Spacer(),
-              Container(
-                    height: 56,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(28),
-                      gradient: const LinearGradient(
-                        colors: [Color(0xFF6C2BFF), Color(0xFFFF469E)],
-                        begin: Alignment.centerLeft,
-                        end: Alignment.centerRight,
-                      ),
-                    ),
-                    child: Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(28),
-                        onTap: () {
-                          Navigator.of(context).pushNamed(Routes.rulesRoute);
-                        },
-                        child: Center(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                            Icon(Icons.graphic_eq),
-                            SizedBox(width: 8),
-                            Text(
-                            'LIGAR COM SPOTIFY',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w900,
-                            ),
-                          ),
-                          ],)
-                        ),
-                      ),
-                    ),
-                  ),
+              Column(
+                children: [
                   SizedBox(height: 8),
-                  Container(
-                    height: 56,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(28),
-                      border: Border.all(width: 2, color: Color(0XFFFFB0CB)),
-                    ),
-                    child: Material(
-                      color: Colors.transparent,
-                      child: InkWell(
+                  Text(
+                    'CONEXÃO SPOTIFY PREMIUM',
+                    style: TextStyle(fontSize: 16, color: Color(0XFFF8F7FC)),
+                  ),
+                  SizedBox(height: 16),
+                  Text(
+                    'Se você tem uma conta Spotify Premium, conecte o app ao Beatspan. Certifique-se de que o app está instalado no dispositivo.',
+                    style: TextStyle(color: Color(0XB3F8F7FC)),
+                  ),
+                ],
+              ),
+              Align(alignment: Alignment.center,
+              child: Container(),),
+              Positioned(
+                bottom: 0,
+                left: 0,right: 0,
+                child: Column(
+                  children: [ 
+                    Container(
+                      height: 56,
+                      decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(28),
-                        onTap: () {
-                          Navigator.of(
-                            context,
-                          ).pushNamed(Routes.changeSpotifyRoute);
-                        },
-                        child: Center(
-                          child: Text(
-                            'NÃO TENHO SPOTIFY PREMIUM',
-                            style: TextStyle(
-                              color: Color(0XFFFFB0CB),
-                              fontSize: 14,
-                              fontWeight: FontWeight.w900,
+                        gradient: const LinearGradient(
+                          colors: [Color(0xFF6C2BFF), Color(0xFFFF469E)],
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
+                        ),
+                      ),
+                      child: Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(28),
+                          onTap: () {
+                            Navigator.of(context).pushNamed(Routes.rulesRoute);
+                          },
+                          child: Center(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.graphic_eq),
+                                SizedBox(width: 8),
+                                Text(
+                                  'LIGAR COM SPOTIFY',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w900,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ),
                       ),
                     ),
-                  ),
+                    SizedBox(height: 8),
+                    Container(
+                      height: 56,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(28),
+                        border: Border.all(width: 2, color: Color(0XFFFFB0CB)),
+                      ),
+                      child: Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(28),
+                          onTap: () {
+                            Navigator.of(
+                              context,
+                            ).pushNamed(Routes.changeSpotifyRoute);
+                          },
+                          child: Center(
+                            child: Text(
+                              'NÃO TENHO SPOTIFY PREMIUM',
+                              style: TextStyle(
+                                color: Color(0XFFFFB0CB),
+                                fontSize: 14,
+                                fontWeight: FontWeight.w900,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
