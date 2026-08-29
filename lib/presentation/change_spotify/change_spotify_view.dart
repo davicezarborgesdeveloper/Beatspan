@@ -9,6 +9,7 @@ import '../resource/style_manager.dart';
 import '../resource/value_manager.dart';
 import '../routes_manager.dart';
 import '../share/widgets/scaffold_hitster.dart';
+import 'widgets/spotify_connect_graphic.dart';
 
 class ChangeSpotifyView extends StatefulWidget {
   const ChangeSpotifyView({super.key});
@@ -29,7 +30,7 @@ class _ChangeSpotifyViewState extends State<ChangeSpotifyView> {
             padding: const EdgeInsets.only(left: 16),
             child: Container(
               decoration: BoxDecoration(
-                shape: BoxShape.circle, 
+                shape: BoxShape.circle,
                 border: Border.all(width: 1, color: Color(0X33CDBDFF)),
               ),
               child: Icon(Icons.arrow_back, color: Colors.white),
@@ -54,13 +55,16 @@ class _ChangeSpotifyViewState extends State<ChangeSpotifyView> {
                   ),
                 ],
               ),
-              Align(alignment: Alignment.center,
-              child: Container(),),
+              Align(
+                alignment: Alignment.center,
+                child: SpotifyConnectGraphic(),
+              ),
               Positioned(
                 bottom: 0,
-                left: 0,right: 0,
+                left: 0,
+                right: 0,
                 child: Column(
-                  children: [ 
+                  children: [
                     Container(
                       height: 56,
                       decoration: BoxDecoration(
@@ -76,7 +80,12 @@ class _ChangeSpotifyViewState extends State<ChangeSpotifyView> {
                         child: InkWell(
                           borderRadius: BorderRadius.circular(28),
                           onTap: () {
-                            Navigator.of(context).pushNamed(Routes.rulesRoute);
+                            final NavigatorState navigator = Navigator.of(
+                              context,
+                            );
+                            navigator.pushNamed(
+                              Routes.changeSpotifyPremiumRoute,
+                            );
                           },
                           child: Center(
                             child: Row(
@@ -110,9 +119,10 @@ class _ChangeSpotifyViewState extends State<ChangeSpotifyView> {
                         child: InkWell(
                           borderRadius: BorderRadius.circular(28),
                           onTap: () {
+                            _appPreferences.setAppPlanType(PlanType.free);
                             Navigator.of(
                               context,
-                            ).pushNamed(Routes.changeSpotifyRoute);
+                            ).pushNamed(Routes.changeSpotifyFreeRoute);
                           },
                           child: Center(
                             child: Text(
@@ -216,10 +226,10 @@ class _ChangeSpotifyViewState extends State<ChangeSpotifyView> {
     //               height: AppSize.s66,
     //               width: AppSize.s220,
     //               child: ElevatedButton(
-    //                 onPressed: () {
-    //                   final NavigatorState navigator = Navigator.of(context);
-    //                   navigator.pushNamed(Routes.changeSpotifyPremiumRoute);
-    //                 },
+    // onPressed: () {
+    //   final NavigatorState navigator = Navigator.of(context);
+    //   navigator.pushNamed(Routes.changeSpotifyPremiumRoute);
+    // },
     //                 child: Text(
     //                   'Spotify Premium',
     //                   style: getMediumStyle(

@@ -1,6 +1,8 @@
 scripts:
   get: flutter pub get
   clean: flutter clean
+  reset: flutter clean;flutter pub get
+
 
   run: flutter run
   run:release: flutter run --release

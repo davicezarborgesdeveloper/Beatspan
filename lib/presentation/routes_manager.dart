@@ -11,18 +11,20 @@ import 'language/language_view.dart';
 import 'rules/rules_view.dart';
 import 'settings/settings_view.dart';
 import 'splash/splash_view.dart';
+import 'spotify_free_transition/spotify_free_transition.dart';
 
 class Routes {
   static const String splashRoute = '/splash';
   static const String firstTimeRoute = '/first';
   static const String rulesRoute = '/rules';
+  static const String changeSpotifyRoute = '/change-spotify';
+  static const String changeSpotifyFreeRoute = '/connect-spotify-free';
+  static const String changeSpotifyPremiumRoute = '/connect-spotify-premium';
 
   static const String homeRoute = '/home';
   static const String faqRoute = '/faq';
   static const String settingsRoute = '/settings';
   static const String contactRoute = '/contact';
-  static const String changeSpotifyRoute = '/change-spotify';
-  static const String changeSpotifyPremiumRoute = '/connect-spotify-premium';
   static const String languageRoute = '/language';
 }
 
@@ -39,7 +41,9 @@ class RouteGenerator {
         return MaterialPageRoute(
           settings: routeSettings,
           builder: (_) => const ChangeSpotifyView(),
-        );  
+        );
+      case Routes.changeSpotifyFreeRoute:
+        return MaterialPageRoute(builder: (_) => const SpotifyFreeTransition());
       case Routes.homeRoute:
         return MaterialPageRoute(builder: (_) => const HomeView());
       case Routes.faqRoute:
@@ -48,7 +52,7 @@ class RouteGenerator {
       case Routes.settingsRoute:
         return MaterialPageRoute(builder: (_) => const SettingsView());
       case Routes.contactRoute:
-        return MaterialPageRoute(builder: (_) => const ContactView());    
+        return MaterialPageRoute(builder: (_) => const ContactView());
       case Routes.changeSpotifyPremiumRoute:
         return MaterialPageRoute(
           builder: (_) => const ConnectSpotifyPremiumView(),
