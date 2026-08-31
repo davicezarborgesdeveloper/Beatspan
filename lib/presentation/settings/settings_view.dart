@@ -25,11 +25,36 @@ class SettingsView extends StatelessWidget {
             ),
           ),
         ),
-      body: Column(children: [
-
-      ],),
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              SizedBox(height: 16),
+              Text(
+                'Geral',
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  color: Color(0XFFA9A2B5),
+                ),
+              ),
+              SizedBox(height: 16),
+              GestureDetector(
+                onTap: (){},
+                child: Container(
+                  child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,children: [Text('Como Jogar'),Icon(Icons.link)],),
+                ),
+              ),
+              SizedBox(height: 4),
+               GestureDetector(
+                onTap: (){},
+                child: Container(
+                  child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,children: [Text('Perguntas frequentes'),Icon(Icons.link)],),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
-      
     );
     // return ScaffoldHitster(
     //   colorFst: ColorManager.ternary,
