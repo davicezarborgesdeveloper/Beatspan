@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../../app/app_prefs.dart';
+import '../../app/di.dart';
+import '../../domain/enum/settings_enum.dart';
 import '../resource/assets_manager.dart';
 import '../resource/color_manager.dart';
 import '../routes_manager.dart';
@@ -73,6 +76,9 @@ class SpotifyFreeTransition extends StatelessWidget {
                         child: InkWell(
                           borderRadius: BorderRadius.circular(28),
                           onTap: () {
+                            instance<AppPreferences>().setAppPlanType(
+                              PlanType.free,
+                            );
                             Navigator.of(
                               context,
                             ).pushReplacementNamed(Routes.homeRoute);
@@ -95,7 +101,7 @@ class SpotifyFreeTransition extends StatelessWidget {
                       height: 56,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(28),
-                        border: Border.all(width: 2, color: Color(0XFFFFB0CB)),
+                        border: Border.all(width: 2, color: Color(0XFFFF469E)),
                       ),
                       child: Material(
                         color: Colors.transparent,
@@ -108,7 +114,7 @@ class SpotifyFreeTransition extends StatelessWidget {
                             child: Text(
                               'LER AS REGRAS',
                               style: TextStyle(
-                                color: Color(0XFFFFB0CB),
+                                color: Color(0XFFFF469E),
                                 fontSize: 14,
                                 fontWeight: FontWeight.w900,
                               ),

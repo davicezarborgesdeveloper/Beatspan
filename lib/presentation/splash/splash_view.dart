@@ -32,6 +32,7 @@ class _SplashViewState extends State<SplashView>
   late final Animation<double> _nameExitOpacity;
   late final Animation<double> _logoExitScale;
   late final Animation<Offset> _logoExitOffset;
+  late final Animation<double> _logoExitOpacity;
 
   static const totalMs = 3700;
 
@@ -113,19 +114,25 @@ class _SplashViewState extends State<SplashView>
         curve: const Interval(0.676, 0.770, curve: Curves.easeIn),
       ),
     );
-    _logoExitScale = Tween(begin: 1.0, end: 0.4).animate(
+    _logoExitScale = Tween(begin: 1.0, end: 0.85).animate(
       CurvedAnimation(
         parent: _c,
         curve: const Interval(0.865, 1.0, curve: Curves.easeIn),
       ),
     );
-    _logoExitOffset = Tween(begin: Offset.zero, end: const Offset(0, -2.6))
+    _logoExitOffset = Tween(begin: Offset.zero, end: const Offset(0, -0.4))
         .animate(
           CurvedAnimation(
             parent: _c,
             curve: const Interval(0.865, 1.0, curve: Curves.easeIn),
           ),
         );
+    _logoExitOpacity = Tween(begin: 1.0, end: 0.0).animate(
+      CurvedAnimation(
+        parent: _c,
+        curve: const Interval(0.92, 1.0, curve: Curves.easeIn),
+      ),
+    );
 
     _c.forward().whenComplete(_goNext);
   }
@@ -157,7 +164,7 @@ class _SplashViewState extends State<SplashView>
                       child: Transform.scale(
                         scale: _logoScale.value * _logoExitScale.value,
                         child: Opacity(
-                          opacity: _logoOpacity.value,
+                          opacity: _logoOpacity.value * _logoExitOpacity.value,
                           child: SizedBox(
                             width: context.screenShortestSide * 0.476,
                             child: Image.asset(ImageAssets.splashLogo),

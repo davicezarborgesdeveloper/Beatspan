@@ -165,6 +165,7 @@ class _FirstTimeViewState extends State<FirstTimeView> {
                     borderRadius: BorderRadius.circular(28),
                     gradient: const LinearGradient(
                       colors: [Color(0xFF6C2BFF), Color(0xFFFF469E)],
+                      stops: [0.0,100],
                       begin: Alignment.centerLeft,
                       end: Alignment.centerRight,
                     ),

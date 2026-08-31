@@ -5,8 +5,8 @@ import 'change_spotify/change_spotify_view.dart';
 import 'contact/contact_view.dart';
 import 'faqs/faqs_view.dart';
 import 'first_time/first_time_view.dart';
+import 'game/game_view.dart';
 import 'home/home_view.dart';
-import 'language/language_view.dart';
 import 'rules/rules_view.dart';
 import 'settings/settings_view.dart';
 import 'splash/splash_view.dart';
@@ -24,6 +24,7 @@ class Routes {
   static const String settingsRoute = '/settings';
   static const String contactRoute = '/contact';
   static const String languageRoute = '/language';
+  static const String gameRoute = '/game';
 }
 
 class RouteGenerator {
@@ -32,7 +33,7 @@ class RouteGenerator {
       case Routes.splashRoute:
         return MaterialPageRoute(builder: (_) => const SplashView());
       case Routes.firstTimeRoute:
-        return MaterialPageRoute(builder: (_) => const FirstTimeView());
+        return _fadeRoute(const FirstTimeView());
       case Routes.rulesRoute:
         return MaterialPageRoute(builder: (_) => const RulesView());
       case Routes.changeSpotifyRoute:
@@ -43,7 +44,7 @@ class RouteGenerator {
       case Routes.changeSpotifyFreeRoute:
         return MaterialPageRoute(builder: (_) => const SpotifyFreeTransition());
       case Routes.homeRoute:
-        return MaterialPageRoute(builder: (_) => const HomeView());
+        return _fadeRoute(const HomeView());
       case Routes.faqRoute:
         initFaqsModule();
         return MaterialPageRoute(builder: (_) => const FaqsView());
@@ -51,9 +52,25 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const SettingsView());
       case Routes.contactRoute:
         return MaterialPageRoute(builder: (_) => const ContactView());
+      case Routes.gameRoute:
+        return MaterialPageRoute(builder: (_) => const GameView());
       default:
         return undefinedRoute();
     }
+  }
+
+  static Route<dynamic> _fadeRoute(Widget page) {
+    return PageRouteBuilder(
+      pageBuilder: (_, __, ___) => page,
+      transitionDuration: const Duration(milliseconds: 450),
+      reverseTransitionDuration: const Duration(milliseconds: 300),
+      transitionsBuilder: (_, animation, __, child) {
+        return FadeTransition(
+          opacity: CurvedAnimation(parent: animation, curve: Curves.easeOut),
+          child: child,
+        );
+      },
+    );
   }
 
   static Route<dynamic> undefinedRoute() {
