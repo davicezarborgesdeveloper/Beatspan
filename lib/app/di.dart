@@ -10,7 +10,7 @@ import '../data/network/spotify_service.dart';
 import '../data/repository/faq_repository_impl.dart';
 import '../domain/repository/faq_repository.dart';
 import '../domain/usecase/faqs_usecase.dart';
-import '../presentation/connect_spotify_premium/connect_spotify_premium_view_model.dart';
+import '../presentation/change_spotify/connect_spotify_premium_view_model.dart';
 import '../presentation/faqs/faqs_view_model.dart';
 import 'app_prefs.dart';
 

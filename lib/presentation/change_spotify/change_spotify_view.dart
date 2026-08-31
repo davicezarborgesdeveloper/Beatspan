@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../app/app_prefs.dart';
 import '../../app/di.dart';
+import '../../domain/enum/flow_state.dart';
 import '../../domain/enum/settings_enum.dart';
 import '../resource/color_manager.dart';
 import '../resource/font_manager.dart';
@@ -9,6 +10,7 @@ import '../resource/style_manager.dart';
 import '../resource/value_manager.dart';
 import '../routes_manager.dart';
 import '../share/widgets/scaffold_hitster.dart';
+import 'connect_spotify_premium_view_model.dart';
 import 'widgets/spotify_connect_graphic.dart';
 
 class ChangeSpotifyView extends StatefulWidget {
@@ -20,20 +22,54 @@ class ChangeSpotifyView extends StatefulWidget {
 
 class _ChangeSpotifyViewState extends State<ChangeSpotifyView> {
   final AppPreferences _appPreferences = instance<AppPreferences>();
+  late final ConnectSpotifyPremiumViewModel _viewModel;
+
+  @override
+  void initState() {
+    super.initState();
+    initSpotifyModule();
+    _viewModel = instance<ConnectSpotifyPremiumViewModel>();
+    _viewModel.state.addListener(() {
+      if (mounted) {
+        if (_viewModel.state.value == FlowState.error) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                _viewModel.errorMessage.value ?? 'Erro desconhecido',
+                style: getMediumStyle(
+                  color: ColorManager.white,
+                  fontSize: FontSize.s14,
+                ),
+              ),
+              backgroundColor: ColorManager.warning,
+            ),
+          );
+        } else if (_viewModel.state.value == FlowState.success) {
+          Navigator.of(context).pushReplacementNamed(Routes.homeRoute);
+        }
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: ColorManager.bagroundColor,
-          leading: Padding(
-            padding: const EdgeInsets.only(left: 16),
-            child: Container(
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(width: 1, color: Color(0X33CDBDFF)),
+          leading: GestureDetector(
+            onTap: () {
+              Navigator.of(context).pop();
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(left: 16),
+              child: Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(width: 1, color: Color(0X33CDBDFF)),
+                ),
+                child: Icon(Icons.arrow_back, color: Colors.white),
               ),
-              child: Icon(Icons.arrow_back, color: Colors.white),
             ),
           ),
         ),
@@ -79,13 +115,8 @@ class _ChangeSpotifyViewState extends State<ChangeSpotifyView> {
                         color: Colors.transparent,
                         child: InkWell(
                           borderRadius: BorderRadius.circular(28),
-                          onTap: () {
-                            final NavigatorState navigator = Navigator.of(
-                              context,
-                            );
-                            navigator.pushNamed(
-                              Routes.changeSpotifyPremiumRoute,
-                            );
+                          onTap: () async {
+                            await _viewModel.connect();
                           },
                           child: Center(
                             child: Row(
@@ -226,10 +257,7 @@ class _ChangeSpotifyViewState extends State<ChangeSpotifyView> {
     //               height: AppSize.s66,
     //               width: AppSize.s220,
     //               child: ElevatedButton(
-    // onPressed: () {
-    //   final NavigatorState navigator = Navigator.of(context);
-    //   navigator.pushNamed(Routes.changeSpotifyPremiumRoute);
-    // },
+    // onPressed: () {},
     //                 child: Text(
     //                   'Spotify Premium',
     //                   style: getMediumStyle(
