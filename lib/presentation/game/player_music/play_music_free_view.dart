@@ -1,10 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 
-class PlayerMusicFreeView extends StatefulWidget {
-  final String previewUrl; // URL de 30s da Web API
+import '../../share/widgets/beatspan_loading_overlay.dart';
 
-  const PlayerMusicFreeView({super.key, required this.previewUrl});
+class PlayerMusicFreeView extends StatefulWidget {
+  final String previewUrl; // URL de 30s
+  final String? trackName;
+  final String? artistName;
+  final String? albumArtUrl;
+
+  const PlayerMusicFreeView({
+    super.key,
+    required this.previewUrl,
+    this.trackName,
+    this.artistName,
+    this.albumArtUrl,
+  });
 
   @override
   State<PlayerMusicFreeView> createState() => _PlayerMusicFreeViewState();
@@ -15,6 +26,10 @@ class _PlayerMusicFreeViewState extends State<PlayerMusicFreeView> {
 
   bool _isLoading = true;
   String? _error;
+
+  static const _purple = Color(0xFF6C2BFF);
+  static const _pink = Color(0xFFE84BC7);
+  static const _cyan = Color(0xFF2CCBF5);
 
   @override
   void initState() {
@@ -43,69 +58,215 @@ class _PlayerMusicFreeViewState extends State<PlayerMusicFreeView> {
 
   @override
   Widget build(BuildContext context) {
-    if (_isLoading) {
-      return const Scaffold(body: Center(child: CircularProgressIndicator()));
-    }
-
-    if (_error != null) {
-      return Scaffold(
-        body: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(24.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Icon(Icons.error_outline, color: Colors.red, size: 48),
-                const SizedBox(height: 16),
-                Text(
-                  _error!,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 16),
-                ),
-                const SizedBox(height: 24),
-                ElevatedButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: const Text('Voltar'),
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
-    }
-
     return Scaffold(
-      body: Center(
-        child: StreamBuilder<PlayerState>(
-          stream: _player.playerStateStream,
-          builder: (context, snapshot) {
-            final state = snapshot.data;
-            final playing = state?.playing ?? false;
+      backgroundColor: const Color(0xFF08050D),
+      body: SafeArea(
+        child: _isLoading
+            ? const BeatspanLoadingOverlay(
+                message: 'CARREGANDO PRÉVIA...',
+                fillBackground: true,
+              )
+            : _error != null
+            ? _buildError(_error!)
+            : _buildPlayer(),
+      ),
+    );
+  }
 
-            return GestureDetector(
-              onTap: () => playing ? _player.pause() : _player.play(),
+  Widget _buildError(String message) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.error_outline, color: Colors.redAccent, size: 48),
+            const SizedBox(height: 16),
+            Text(
+              message,
+              textAlign: TextAlign.center,
+              style: const TextStyle(color: Colors.white, fontSize: 16),
+            ),
+            const SizedBox(height: 24),
+            ElevatedButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Voltar'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPlayer() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
+      child: Column(
+        children: [
+          Align(
+            alignment: Alignment.topRight,
+            child: GestureDetector(
+              onTap: () => Navigator.of(context).pop(),
               child: Container(
-                width: 220,
-                height: 220,
+                width: 44,
+                height: 44,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  gradient: const LinearGradient(
-                    colors: [Color(0xFF7BE495), Color(0xFF5EC5FF)],
-                    begin: Alignment.topRight,
-                    end: Alignment.bottomLeft,
-                  ),
-                  boxShadow: const [
-                    BoxShadow(blurRadius: 24, color: Colors.black26),
-                  ],
+                  color: Colors.white.withValues(alpha: 0.08),
+                  border: Border.all(color: Colors.white.withValues(alpha: 0.15)),
                 ),
-                child: Icon(
-                  playing ? Icons.pause : Icons.play_arrow,
-                  size: 120,
-                  color: Colors.white,
+                child: const Icon(Icons.close, color: Colors.white),
+              ),
+            ),
+          ),
+          const Spacer(),
+          _albumArt(),
+          const SizedBox(height: 32),
+          Text(
+            widget.trackName ?? 'Faixa desconhecida',
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 22,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Flexible(
+                child: Text(
+                  widget.artistName ?? '',
+                  textAlign: TextAlign.center,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: Colors.white.withValues(alpha: 0.7),
+                    fontSize: 16,
+                  ),
                 ),
               ),
-            );
-          },
+              if (widget.artistName != null) ...[
+                const SizedBox(width: 8),
+                _previaBadge(),
+              ],
+            ],
+          ),
+          const Spacer(),
+          _playButton(),
+          const SizedBox(height: 32),
+          _nextCardButton(),
+        ],
+      ),
+    );
+  }
+
+  Widget _previaBadge() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: _cyan),
+      ),
+      child: const Text(
+        'PRÉVIA',
+        style: TextStyle(
+          color: _cyan,
+          fontSize: 12,
+          fontWeight: FontWeight.w800,
+          letterSpacing: 1.0,
+        ),
+      ),
+    );
+  }
+
+  Widget _albumArt() {
+    return Container(
+      width: 260,
+      height: 260,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        gradient: const LinearGradient(
+          colors: [_purple, _pink],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        boxShadow: [
+          BoxShadow(color: _purple.withValues(alpha: 0.4), blurRadius: 30),
+        ],
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: widget.albumArtUrl != null
+          ? Image.network(
+              widget.albumArtUrl!,
+              fit: BoxFit.cover,
+              errorBuilder: (_, __, ___) => _albumArtFallback(),
+            )
+          : _albumArtFallback(),
+    );
+  }
+
+  Widget _albumArtFallback() {
+    return const Center(
+      child: Icon(Icons.music_note_rounded, color: Colors.white, size: 72),
+    );
+  }
+
+  Widget _playButton() {
+    return StreamBuilder<PlayerState>(
+      stream: _player.playerStateStream,
+      builder: (context, snapshot) {
+        final state = snapshot.data;
+        final playing = state?.playing ?? false;
+
+        return GestureDetector(
+          onTap: () => playing ? _player.pause() : _player.play(),
+          child: Container(
+            width: 76,
+            height: 76,
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              gradient: LinearGradient(
+                colors: [_purple, _pink],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+            ),
+            child: Icon(
+              playing ? Icons.pause : Icons.play_arrow,
+              color: Colors.white,
+              size: 40,
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _nextCardButton() {
+    return SizedBox(
+      width: double.infinity,
+      height: 56,
+      child: ElevatedButton(
+        onPressed: () => Navigator.of(context).pop(),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: _purple,
+          foregroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(28),
+          ),
+          elevation: 0,
+        ),
+        child: const Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'PRÓXIMA CARTA',
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w900),
+            ),
+            SizedBox(width: 8),
+            Icon(Icons.arrow_forward, size: 18),
+          ],
         ),
       ),
     );

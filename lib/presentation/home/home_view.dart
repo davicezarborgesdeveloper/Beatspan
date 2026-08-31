@@ -7,6 +7,7 @@ import '../camera_permission/camera_permission_view.dart';
 import '../resource/color_manager.dart';
 import '../resource/screen_manager.dart';
 import '../routes_manager.dart';
+import '../share/widgets/connectivity_guard.dart';
 
 import '../resource/assets_manager.dart';
 
@@ -40,6 +41,9 @@ class _HomeViewState extends State<HomeView> {
   }
 
   Future<void> _onPlayNow() async {
+    if (!await context.requireInternetConnection()) return;
+    if (!mounted) return;
+
     final status = await Permission.camera.status;
 
     if (status.isGranted) {
@@ -159,7 +163,7 @@ class _HomeViewState extends State<HomeView> {
                             onTap: () {
                               Navigator.of(
                                 context,
-                              ).pushNamed(Routes.changeSpotifyFreeRoute);
+                              ).pushNamed(Routes.settingsRoute);
                             },
                             child: Center(
                               child: Text(
@@ -181,102 +185,6 @@ class _HomeViewState extends State<HomeView> {
             ),
           ),
         ),
-        // child: ScaffoldHitster(
-        //   colorFst: ColorManager.primary,
-        //   colorSnd: ColorManager.secondary,
-        //   bubbles: 2,
-        //   sndRoute: '/settings',
-        //   child: Column(
-        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //     children: [
-        //       Padding(
-        //         padding: const EdgeInsets.only(top: 130),
-        //         child: Column(
-        //           children: [
-        //             Text(
-        //               'VAMOS JOGAR',
-        //               style: getMediumStyle(
-        //                 color: ColorManager.white,
-        //                 fontSize: FontSize.s32,
-        //               ),
-        //             ),
-        //             const SizedBox(height: AppPadding.p32),
-        //             Image.asset(ImageAssets.splashWordmark),
-        //             const SizedBox(height: AppPadding.p24),
-        //             Text(
-        //               'O jogo de cartas de música',
-        //               style: getMediumStyle(
-        //                 color: ColorManager.white,
-        //                 fontSize: FontSize.s16,
-        //               ),
-        //             ),
-        //           ],
-        //         ),
-        //       ),
-        //       Padding(
-        //         padding: const EdgeInsets.only(bottom: AppPadding.p80),
-        //         child: Column(
-        //           children: [
-        //             SizedBox(
-        //               height: AppSize.s66,
-        //               width: AppSize.s220,
-        //               child: ElevatedButton(
-        //                 style: ElevatedButton.styleFrom(
-        //                   backgroundColor: Colors.transparent,
-        //                   side: BorderSide(color: ColorManager.white, width: 2),
-        //                   elevation: 0,
-        //                 ),
-        //                 onPressed: () {
-        //                   Navigator.of(context).push(
-        //                     MaterialPageRoute(builder: (_) => const RulesView()),
-        //                   );
-        //                 },
-        //                 child: Text(
-        //                   'Ler as regras',
-        //                   style: getMediumStyle(
-        //                     color: ColorManager.white,
-        //                     fontSize: FontSize.s16,
-        //                   ),
-        //                 ),
-        //               ),
-        //             ),
-        //             Padding(
-        //               padding: const EdgeInsets.symmetric(
-        //                 vertical: AppPadding.p24,
-        //               ),
-        //               child: Text(
-        //                 'OU',
-        //                 style: getMediumStyle(
-        //                   color: ColorManager.white,
-        //                   fontSize: FontSize.s16,
-        //                 ),
-        //               ),
-        //             ),
-        //             SizedBox(
-        //               height: AppSize.s66,
-        //               width: AppSize.s220,
-        //               child: ElevatedButton(
-        //                 onPressed: () {
-        //                   Navigator.of(
-        //                     context,
-        //                   ).push(MaterialPageRoute(builder: (_) => GameView()));
-        //                 },
-        //                 child: Text(
-        //                   'Começar um jogo',
-        //                   style: getMediumStyle(
-        //                     color: Colors.black,
-        //                     fontSize: FontSize.s16,
-        //                   ),
-        //                 ),
-        //               ),
-        //             ),
-        //           ],
-        //         ),
-        //       ),
-        //     ],
-        //   ),
-        // ),
-        //
       ),
     );
   }

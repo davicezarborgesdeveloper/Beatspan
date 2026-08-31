@@ -3,9 +3,11 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 
 import '../../app/app_prefs.dart';
 import '../../app/di.dart';
+import '../../data/network/itunes_search_api.dart';
 import '../../data/network/spotify_service.dart';
 import '../../data/network/spotify_webapi.dart';
 import '../../domain/enum/settings_enum.dart';
+import '../share/widgets/beatspan_loading_overlay.dart';
 import 'game_viewmodel.dart';
 import 'game_error_view.dart';
 import 'player_music/play_music_free_view.dart';
@@ -25,6 +27,7 @@ class _GameViewState extends State<GameView> {
   final AppPreferences _appPreferences = instance<AppPreferences>();
 
   bool _isHandlingCode = false;
+  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -45,6 +48,7 @@ class _GameViewState extends State<GameView> {
     // await qrController.stop();
     if (!mounted) return;
 
+    setState(() => _isLoading = true);
     try {
       final result = controller.validate(value);
 
@@ -57,6 +61,7 @@ class _GameViewState extends State<GameView> {
     } finally {
       if (mounted) {
         _isHandlingCode = false;
+        setState(() => _isLoading = false);
         // await qrController.start();
       }
     }
@@ -81,10 +86,33 @@ class _GameViewState extends State<GameView> {
           await _goToError();
           return;
         }
-        final spotifyService = instance<SpotifyService>();
-        final token = await spotifyService.getAccessToken();
-        final api = SpotifyWebApi(token);
-        final previewUrl = await api.getTrackPreviewUrl(trackId);
+
+        String? previewUrl;
+        String? trackName;
+        String? artistName;
+        String? albumArtUrl;
+        try {
+          final spotifyService = instance<SpotifyService>();
+          final token = await spotifyService.getAccessToken();
+          final api = SpotifyWebApi(token);
+          final track = await api.getTrack(trackId);
+          previewUrl = track?.previewUrl;
+          trackName = track?.name;
+          artistName = track?.artist;
+          albumArtUrl = track?.albumArtUrl;
+
+          if (previewUrl == null && track?.name != null) {
+            final itunesTrack = await ItunesSearchApi().searchTrack(
+              trackName: track!.name!,
+              artist: track.artist,
+            );
+            previewUrl = itunesTrack?.previewUrl;
+            albumArtUrl ??= itunesTrack?.artworkUrl;
+          }
+        } catch (_) {
+          await _goToConnectionError();
+          return;
+        }
 
         if (previewUrl == null) {
           await _goToPreviewUnavailable();
@@ -92,7 +120,14 @@ class _GameViewState extends State<GameView> {
         }
 
         if (!mounted) return;
-        await _navigateTo(PlayerMusicFreeView(previewUrl: previewUrl));
+        await _navigateTo(
+          PlayerMusicFreeView(
+            previewUrl: previewUrl,
+            trackName: trackName,
+            artistName: artistName,
+            albumArtUrl: albumArtUrl,
+          ),
+        );
         break;
     }
   }
@@ -113,11 +148,32 @@ class _GameViewState extends State<GameView> {
     );
   }
 
-  Future<void> _navigateTo(Widget page) async {
-    await Navigator.of(context).push(MaterialPageRoute(builder: (_) => page));
+  Future<void> _goToConnectionError() async {
+    if (!mounted) return;
+    await _navigateTo(
+      const GameErrorView(
+        title: 'ERRO DE CONEXÃO',
+        message:
+            'Não foi possível conectar ao Spotify. Verifique sua internet e tente escanear a carta novamente.',
+        icon: Icons.wifi_off_rounded,
+      ),
+    );
   }
 
-  @override
+  Future<void> _navigateTo(Widget page) async {
+    await Navigator.of(context).push(
+      PageRouteBuilder(
+        pageBuilder: (_, __, ___) => page,
+        transitionDuration: const Duration(milliseconds: 250),
+        reverseTransitionDuration: const Duration(milliseconds: 200),
+        transitionsBuilder: (_, animation, __, child) {
+          return FadeTransition(opacity: animation, child: child);
+        },
+      ),
+    );
+  }
+
+  @override 
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
@@ -142,6 +198,8 @@ class _GameViewState extends State<GameView> {
             ),
           ),
           ScannerOverlay(),
+          if (_isLoading)
+            const Positioned.fill(child: BeatspanLoadingOverlay()),
         ],
       ),
     );
