@@ -67,76 +67,78 @@ class _SettingsViewState extends State<SettingsView> {
             ),
           ),
         ),
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 16),
-              GeneralSettings(),
-              SizedBox(height: 32),
-              Text(
-                'Configurações do spotify',
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  color: Color(0XFFA9A2B5),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 16),
+                GeneralSettings(),
+                SizedBox(height: 32),
+                Text(
+                  'Configurações do spotify',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    color: Color(0XFFA9A2B5),
+                  ),
                 ),
-              ),
-              SizedBox(height: 12),
-              GestureDetector(
-                onTap: isPremium ? null : _connectSpotify,
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                  decoration: BoxDecoration(
-                    color: Color(0XFF110B1A),
-                    border: Border.all(
-                      width: 1,
-                      color: Colors.white.withValues(alpha: 0.15),
+                SizedBox(height: 12),
+                GestureDetector(
+                  onTap: isPremium ? null : _connectSpotify,
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                    decoration: BoxDecoration(
+                      color: Color(0XFF110B1A),
+                      border: Border.all(
+                        width: 1,
+                        color: Colors.white.withValues(alpha: 0.15),
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(12.0)),
                     ),
-                    borderRadius: BorderRadius.all(Radius.circular(12.0)),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.music_note,
-                            color: Color(0XFF1DB954),
-                            size: 18,
-                          ),
-                          SizedBox(width: 4),
-                          Text(
-                            'Spotify',
-                            style: TextStyle(
-                              fontSize: 20,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.music_note,
                               color: Color(0XFF1DB954),
-                              fontWeight: FontWeight.w600,
+                              size: 18,
                             ),
-                          ),
-                        ],
-                      ),
-                      Text(
-                        isPremium ? 'PREMIUM' : 'FREE',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          color: Color(0XFF1DB954),
+                            SizedBox(width: 4),
+                            Text(
+                              'Spotify',
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: Color(0XFF1DB954),
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
+                        Text(
+                          isPremium ? 'PREMIUM' : 'FREE',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: Color(0XFF1DB954),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              SizedBox(height: 32),
-              GameMode(
-                isPremium: isPremium,
-                onTap: (value) {
-                  print('Game mode selected: $value');
-                },
-              ),
-              SizedBox(height: 32),
-              TurnPhone(),
-            ],
+                SizedBox(height: 32),
+                GameMode(
+                  isPremium: isPremium,
+                  onTap: (value) {
+                    print('Game mode selected: $value');
+                  },
+                ),
+                SizedBox(height: 32),
+                TurnPhone(),
+              ],
+            ),
           ),
         ),
       ),
