@@ -1,17 +1,59 @@
 import 'package:flutter/material.dart';
 
+import '../../app/app_prefs.dart';
+import '../../app/di.dart';
+import '../../domain/enum/settings_enum.dart';
+import '../change_spotify/connect_spotify_premium_view_model.dart';
 import '../resource/color_manager.dart';
 import '../resource/font_manager.dart';
 import '../resource/style_manager.dart';
 import '../resource/value_manager.dart';
 import '../routes_manager.dart';
 import '../share/widgets/scaffold_hitster.dart';
+import 'widget/game_mode.dart';
+import 'widget/general_settings.dart';
+import 'widget/turn_phone.dart';
 
-class SettingsView extends StatelessWidget {
+class SettingsView extends StatefulWidget {
   const SettingsView({super.key});
 
   @override
+  State<SettingsView> createState() => _SettingsViewState();
+}
+
+class _SettingsViewState extends State<SettingsView> {
+  final AppPreferences _appPreferences = instance<AppPreferences>();
+  late final ConnectSpotifyPremiumViewModel _viewModel;
+  PlanType? _planType;
+
+  @override
+  void initState() {
+    super.initState();
+    initSpotifyModule();
+    _viewModel = instance<ConnectSpotifyPremiumViewModel>();
+    _loadPlanType();
+  }
+
+  @override
+  void dispose() {
+    _viewModel.dispose();
+    super.dispose();
+  }
+
+  Future<void> _loadPlanType() async {
+    final plan = await _appPreferences.getAppPlanType();
+    if (!mounted) return;
+    setState(() => _planType = plan);
+  }
+
+  Future<void> _connectSpotify() async {
+    await _viewModel.connect();
+    await _loadPlanType();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final isPremium = _planType == PlanType.premium;
     return SafeArea(
       child: Scaffold(
         backgroundColor: Color(0XFF08050D),
@@ -28,18 +70,21 @@ class SettingsView extends StatelessWidget {
         body: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 16),
+              GeneralSettings(),
+              SizedBox(height: 32),
               Text(
-                'Geral',
+                'Configurações do spotify',
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
                   color: Color(0XFFA9A2B5),
                 ),
               ),
-              SizedBox(height: 16),
+              SizedBox(height: 12),
               GestureDetector(
-                onTap: () {},
+                onTap: isPremium ? null : _connectSpotify,
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                   decoration: BoxDecoration(
@@ -48,59 +93,49 @@ class SettingsView extends StatelessWidget {
                       width: 1,
                       color: Colors.white.withValues(alpha: 0.15),
                     ),
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(12.0),
-                      topRight: Radius.circular(12.0)
-
-                    )
+                    borderRadius: BorderRadius.all(Radius.circular(12.0)),
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.music_note,
+                            color: Color(0XFF1DB954),
+                            size: 18,
+                          ),
+                          SizedBox(width: 4),
+                          Text(
+                            'Spotify',
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: Color(0XFF1DB954),
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
                       Text(
-                        'Como Jogar',
+                        isPremium ? 'PREMIUM' : 'FREE',
                         style: TextStyle(
-                          fontSize: 18,
-                          color: Color(0XFFF8F7FC),
+                          fontWeight: FontWeight.w600,
+                          color: Color(0XFF1DB954),
                         ),
                       ),
-                      Icon(Icons.link,color: Color(0XFFF8F7FC),),
                     ],
                   ),
                 ),
               ),
-              SizedBox(height: 4),
-              GestureDetector(
-                onTap: () {},
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                   decoration: BoxDecoration(
-                    color: Color(0XFF110B1A),
-                    border: Border.all(
-                      width: 1,
-                      color: Colors.white.withValues(alpha: 0.15),
-                    ),
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(12.0),
-                      bottomRight: Radius.circular(12.0)
-
-                    )
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Perguntas frequentes',
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Color(0XFFF8F7FC),
-                        ),
-                      ),
-                      Icon(Icons.link,color: Color(0XFFF8F7FC),),
-                    ],
-                  ),
-                ),
+              SizedBox(height: 32),
+              GameMode(
+                isPremium: isPremium,
+                onTap: (value) {
+                  print('Game mode selected: $value');
+                },
               ),
+              SizedBox(height: 32),
+              TurnPhone(),
             ],
           ),
         ),
