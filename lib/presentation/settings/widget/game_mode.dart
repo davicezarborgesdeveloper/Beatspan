@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 
+import '../../../app/app_prefs.dart';
+import '../../../app/di.dart';
+import '../../../domain/enum/settings_enum.dart';
+import 'card_border.dart';
+
 class GameMode extends StatefulWidget {
-  const GameMode({super.key, required this.isPremium,required this.onTap});
+  const GameMode({super.key, required this.isPremium, required this.onTap});
   final Function(int)? onTap;
   final bool isPremium;
 
@@ -10,33 +15,21 @@ class GameMode extends StatefulWidget {
 }
 
 class _GameModeState extends State<GameMode> {
-  ValueNotifier<int> isTrackMode = ValueNotifier<int>(1);
+  final AppPreferences _appPreferences = instance<AppPreferences>();
 
-  static const _selectedGradient = LinearGradient(
-    colors: [Color(0XFF6C2BFF), Color(0XFFFF469E)],
-    begin: AlignmentDirectional.bottomStart,
-    end: AlignmentDirectional.topEnd,
+  late final ValueNotifier<int> isTrackMode = ValueNotifier<int>(
+    _appPreferences.getGameMode() == GameModeType.fullTrack ? 0 : 1,
   );
 
-  Widget _cardBorder({required bool selected, required Widget child}) {
-    return Container(
-      padding: const EdgeInsets.all(1),
-      decoration: BoxDecoration(
-        gradient: selected ? _selectedGradient : null,
-        color: selected ? null : Colors.white.withValues(alpha: 0.15),
-        borderRadius: BorderRadius.circular(12.0),
-      ),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Color(0XFF110B1A),
-          borderRadius: BorderRadius.circular(11.0),
-        ),
-        child: child,
-      ),
-    );
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      widget.onTap?.call(isTrackMode.value);
+    });
   }
 
-  Widget buttonGameMode(bool selected) {
+  Widget buttonRadio(bool selected) {
     return Container(
       width: 24,
       height: 24,
@@ -52,7 +45,7 @@ class _GameModeState extends State<GameMode> {
               height: 12,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                gradient: _selectedGradient,
+                gradient: kSelectedGradient,
               ),
             )
           : null,
@@ -78,20 +71,25 @@ class _GameModeState extends State<GameMode> {
             return Column(
               children: [
                 GestureDetector(
-                  onTap: widget.isPremium?() {
-                    isTrackMode.value = 0;
-                    widget.onTap?.call(0);
-                  }:null,
-                  child: _cardBorder(
+                  onTap: widget.isPremium
+                      ? () {
+                          isTrackMode.value = 0;
+                          _appPreferences.setGameMode(GameModeType.fullTrack);
+                          widget.onTap?.call(0);
+                        }
+                      : null,
+                  child: CardBorder(
                     selected: trackMode == 0,
                     child: Container(
-                      padding: EdgeInsets.all(24),
+                      padding: EdgeInsets.all(16),
                       child: Row(
-                        crossAxisAlignment:widget.isPremium ? CrossAxisAlignment.start : CrossAxisAlignment.center,
+                        crossAxisAlignment: widget.isPremium
+                            ? CrossAxisAlignment.start
+                            : CrossAxisAlignment.center,
                         // crossAxisAlignment: widget.isPremium?CrossAxisAlignment.center:CrossAxisAlignment.start,
                         children: [
                           widget.isPremium
-                              ? buttonGameMode(trackMode == 0)
+                              ? buttonRadio(trackMode == 0)
                               : Text(
                                   'Indisponível',
                                   style: TextStyle(color: Color(0XFFA9A2B5)),
@@ -130,17 +128,18 @@ class _GameModeState extends State<GameMode> {
                 GestureDetector(
                   onTap: () {
                     isTrackMode.value = 1;
+                    _appPreferences.setGameMode(GameModeType.preview);
                     widget.onTap?.call(1);
                   },
-                  child: _cardBorder(
+                  child: CardBorder(
                     selected: trackMode == 1,
                     child: Container(
-                      padding: EdgeInsets.all(24),
+                      padding: EdgeInsets.all(16),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          buttonGameMode(trackMode == 1),
-                          SizedBox(width: 24),
+                          buttonRadio(trackMode == 1),
+                          SizedBox(width: 12),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,

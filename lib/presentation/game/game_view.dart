@@ -12,6 +12,7 @@ import 'game_viewmodel.dart';
 import 'game_error_view.dart';
 import 'player_music/play_music_free_view.dart';
 import 'player_music/player_music_premium_view.dart';
+import 'turn_phone_ready_view.dart';
 import 'widget/scanner_overlay.dart';
 
 class GameView extends StatefulWidget {
@@ -75,61 +76,63 @@ class _GameViewState extends State<GameView> {
     }
     final plan = await _appPreferences.getAppPlanType();
     if (plan == null) return;
-    switch (plan) {
-      case PlanType.premium:
-        if (!mounted) return;
-        await _navigateTo(PlayerMusicPremiumView(initialUri: spotifyUri));
-        break;
-      case PlanType.free:
-        final trackId = controller.extractTrackId(rawUrl);
-        if (trackId == null) {
-          await _goToError();
-          return;
-        }
+    final gameMode = _appPreferences.getGameMode();
+    final usePreview =
+        plan == PlanType.free || gameMode == GameModeType.preview;
 
-        String? previewUrl;
-        String? trackName;
-        String? artistName;
-        String? albumArtUrl;
-        try {
-          final spotifyService = instance<SpotifyService>();
-          final token = await spotifyService.getAccessToken();
-          final api = SpotifyWebApi(token);
-          final track = await api.getTrack(trackId);
-          previewUrl = track?.previewUrl;
-          trackName = track?.name;
-          artistName = track?.artist;
-          albumArtUrl = track?.albumArtUrl;
-
-          if (previewUrl == null && track?.name != null) {
-            final itunesTrack = await ItunesSearchApi().searchTrack(
-              trackName: track!.name!,
-              artist: track.artist,
-            );
-            previewUrl = itunesTrack?.previewUrl;
-            albumArtUrl ??= itunesTrack?.artworkUrl;
-          }
-        } catch (_) {
-          await _goToConnectionError();
-          return;
-        }
-
-        if (previewUrl == null) {
-          await _goToPreviewUnavailable();
-          return;
-        }
-
-        if (!mounted) return;
-        await _navigateTo(
-          PlayerMusicFreeView(
-            previewUrl: previewUrl,
-            trackName: trackName,
-            artistName: artistName,
-            albumArtUrl: albumArtUrl,
-          ),
-        );
-        break;
+    if (!usePreview) {
+      if (!mounted) return;
+      await _navigateToPlayer(PlayerMusicPremiumView(initialUri: spotifyUri));
+      return;
     }
+
+    final trackId = controller.extractTrackId(rawUrl);
+    if (trackId == null) {
+      await _goToError();
+      return;
+    }
+
+    String? previewUrl;
+    String? trackName;
+    String? artistName;
+    String? albumArtUrl;
+    try {
+      final spotifyService = instance<SpotifyService>();
+      final token = await spotifyService.getAccessToken();
+      final api = SpotifyWebApi(token);
+      final track = await api.getTrack(trackId);
+      previewUrl = track?.previewUrl;
+      trackName = track?.name;
+      artistName = track?.artist;
+      albumArtUrl = track?.albumArtUrl;
+
+      if (previewUrl == null && track?.name != null) {
+        final itunesTrack = await ItunesSearchApi().searchTrack(
+          trackName: track!.name!,
+          artist: track.artist,
+        );
+        previewUrl = itunesTrack?.previewUrl;
+        albumArtUrl ??= itunesTrack?.artworkUrl;
+      }
+    } catch (_) {
+      await _goToConnectionError();
+      return;
+    }
+
+    if (previewUrl == null) {
+      await _goToPreviewUnavailable();
+      return;
+    }
+
+    if (!mounted) return;
+    await _navigateToPlayer(
+      PlayerMusicFreeView(
+        previewUrl: previewUrl,
+        trackName: trackName,
+        artistName: artistName,
+        albumArtUrl: albumArtUrl,
+      ),
+    );
   }
 
   Future<void> _goToError() async {
@@ -160,6 +163,34 @@ class _GameViewState extends State<GameView> {
     );
   }
 
+  Future<void> _navigateToPlayer(Widget player) async {
+    final turnPhoneEnabled = _appPreferences.getTurnPhoneEnabled();
+    if (!turnPhoneEnabled) {
+      await _navigateTo(player);
+      return;
+    }
+
+    final mode = _appPreferences.getTurnPhoneMode();
+    await _navigateTo(
+      TurnPhoneReadyView(
+        mode: mode,
+        onReady: () {
+          if (!mounted) return;
+          Navigator.of(context).pushReplacement(
+            PageRouteBuilder(
+              pageBuilder: (_, __, ___) => player,
+              transitionDuration: const Duration(milliseconds: 250),
+              reverseTransitionDuration: const Duration(milliseconds: 200),
+              transitionsBuilder: (_, animation, __, child) {
+                return FadeTransition(opacity: animation, child: child);
+              },
+            ),
+          );
+        },
+      ),
+    );
+  }
+
   Future<void> _navigateTo(Widget page) async {
     await Navigator.of(context).push(
       PageRouteBuilder(
@@ -173,7 +204,7 @@ class _GameViewState extends State<GameView> {
     );
   }
 
-  @override 
+  @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 

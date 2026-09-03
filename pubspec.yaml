@@ -24,6 +24,8 @@ dependencies:
   just_audio: ^0.10.5
   http: ^1.6.0
   fluttertoast: ^9.0.0
+  sensors_plus: ^6.1.1
+  proximity_sensor: ^1.0.3
 
 
 dev_dependencies:

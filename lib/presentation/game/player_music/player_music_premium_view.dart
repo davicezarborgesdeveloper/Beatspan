@@ -37,6 +37,12 @@ class _PlayerMusicPremiumViewState extends State<PlayerMusicPremiumView> {
     _initSpotify();
   }
 
+  @override
+  void dispose() {
+    SpotifySdk.pause().catchError((_) {});
+    super.dispose();
+  }
+
   Future<void> _initSpotify() async {
     // Evita chamar o plugin em plataformas não suportadas
     if (!(kIsWeb || Platform.isAndroid || Platform.isIOS)) {
