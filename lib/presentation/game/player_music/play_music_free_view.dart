@@ -113,53 +113,125 @@ class _PlayerMusicFreeViewState extends State<PlayerMusicFreeView> {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: Colors.white.withValues(alpha: 0.08),
-                  border: Border.all(color: Colors.white.withValues(alpha: 0.15)),
+                  border: Border.all(
+                    color: Colors.white.withValues(alpha: 0.15),
+                  ),
                 ),
                 child: const Icon(Icons.close, color: Colors.white),
               ),
             ),
           ),
-          const Spacer(),
-          _albumArt(),
-          const SizedBox(height: 32),
-          Text(
-            widget.trackName ?? 'Faixa desconhecida',
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 22,
-              fontWeight: FontWeight.w800,
+          Spacer(),
+          Container(
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              color: Color(0XFF110B1A),
+              border: Border.all(
+                width: 1,
+                color: Colors.white.withValues(alpha: 0.05),
+              ),
+              borderRadius: BorderRadius.circular(32),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.5),
+                  blurRadius: 40,
+                  spreadRadius: 0,
+                  offset: const Offset(0, 10),
+                ),
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _albumArt(),
+                SizedBox(height: 24),
+                Text(widget.trackName ?? '',style:TextStyle(fontSize:16,color:Color(0XFFF8F7FC))),
+                Row(
+                  children: [
+                    Text(widget.artistName ?? '',style:TextStyle(fontSize:18,color:Color(0XFFA9A2B5))),
+                  SizedBox(width: 8),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                    decoration:BoxDecoration(
+                      color:Color(0XFF06B6D4).withValues(alpha:0.1),
+                      border:Border.all(color:Color(0XFF06B6D4).withValues(alpha:0.2)),
+                      borderRadius:BorderRadius.circular(20)
+                    ),child:Text('PRÉVIA',style:TextStyle(color: Color(0XFF06B6D4),fontWeight:FontWeight.w800)))
+                  ],
+                ),
+                _playButton(),
+              ],
             ),
           ),
-          const SizedBox(height: 8),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Flexible(
-                child: Text(
-                  widget.artistName ?? '',
-                  textAlign: TextAlign.center,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    color: Colors.white.withValues(alpha: 0.7),
-                    fontSize: 16,
-                  ),
-                ),
-              ),
-              if (widget.artistName != null) ...[
-                const SizedBox(width: 8),
-                _previaBadge(),
-              ],
-            ],
-          ),
-          const Spacer(),
-          _playButton(),
-          const SizedBox(height: 32),
+          SizedBox(height: 32),
           _nextCardButton(),
         ],
       ),
     );
   }
+
+  // Widget _buildPlayer() {
+  //   return Padding(
+  //     padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
+  //     child: Column(
+  //       children: [
+  // Align(
+  //   alignment: Alignment.topRight,
+  //   child: GestureDetector(
+  //     onTap: () => Navigator.of(context).pop(),
+  //     child: Container(
+  //       width: 44,
+  //       height: 44,
+  //       decoration: BoxDecoration(
+  //         shape: BoxShape.circle,
+  //         color: Colors.white.withValues(alpha: 0.08),
+  //         border: Border.all(color: Colors.white.withValues(alpha: 0.15)),
+  //       ),
+  //       child: const Icon(Icons.close, color: Colors.white),
+  //     ),
+  //   ),
+  // ),
+  //         const Spacer(),
+  //         _albumArt(),
+  //         const SizedBox(height: 32),
+  //         Text(
+  //           widget.trackName ?? 'Faixa desconhecida',
+  //           textAlign: TextAlign.center,
+  //           style: const TextStyle(
+  //             color: Colors.white,
+  //             fontSize: 22,
+  //             fontWeight: FontWeight.w800,
+  //           ),
+  //         ),
+  //         const SizedBox(height: 8),
+  //         Row(
+  //           mainAxisAlignment: MainAxisAlignment.center,
+  //           children: [
+  //             Flexible(
+  //               child: Text(
+  //                 widget.artistName ?? '',
+  //                 textAlign: TextAlign.center,
+  //                 overflow: TextOverflow.ellipsis,
+  //                 style: TextStyle(
+  //                   color: Colors.white.withValues(alpha: 0.7),
+  //                   fontSize: 16,
+  //                 ),
+  //               ),
+  //             ),
+  //             if (widget.artistName != null) ...[
+  //               const SizedBox(width: 8),
+  //               _previaBadge(),
+  //             ],
+  //           ],
+  //         ),
+  //         const Spacer(),
+  //         _playButton(),
+  //         const SizedBox(height: 32),
+  //         _nextCardButton(),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   Widget _previaBadge() {
     return Container(
@@ -182,19 +254,7 @@ class _PlayerMusicFreeViewState extends State<PlayerMusicFreeView> {
 
   Widget _albumArt() {
     return Container(
-      width: 260,
-      height: 260,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        gradient: const LinearGradient(
-          colors: [_purple, _pink],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        boxShadow: [
-          BoxShadow(color: _purple.withValues(alpha: 0.4), blurRadius: 30),
-        ],
-      ),
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
       clipBehavior: Clip.antiAlias,
       child: widget.albumArtUrl != null
           ? Image.network(

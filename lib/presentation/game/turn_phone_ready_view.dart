@@ -24,12 +24,15 @@ class TurnPhoneReadyView extends StatefulWidget {
   State<TurnPhoneReadyView> createState() => _TurnPhoneReadyViewState();
 }
 
-class _TurnPhoneReadyViewState extends State<TurnPhoneReadyView> {
+class _TurnPhoneReadyViewState extends State<TurnPhoneReadyView>
+    with WidgetsBindingObserver {
   static const _faceDownThreshold = -8.5;
+  static const _proximityFallbackDelay = Duration(milliseconds: 1500);
 
   StreamSubscription<AccelerometerEvent>? _accelerometerSubscription;
   StreamSubscription<int>? _proximitySubscription;
   Timer? _countdownTimer;
+  Timer? _proximityFallbackTimer;
   int _secondsLeft = 3;
   bool _completed = false;
   bool _isFaceDown = false;
@@ -38,6 +41,7 @@ class _TurnPhoneReadyViewState extends State<TurnPhoneReadyView> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     switch (widget.mode) {
       case TurnPhoneMode.gyroscope:
         _listenForFaceDown();
@@ -45,13 +49,33 @@ class _TurnPhoneReadyViewState extends State<TurnPhoneReadyView> {
         break;
       case TurnPhoneMode.countdown:
         _startCountdown();
-        break; 
+        break;
+    }
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (_completed || widget.mode != TurnPhoneMode.gyroscope) return;
+    if (state == AppLifecycleState.resumed) {
+      _accelerometerSubscription?.cancel();
+      _proximitySubscription?.cancel();
+      _proximityFallbackTimer?.cancel();
+      _isFaceDown = false;
+      _isNear = false;
+      _listenForFaceDown();
+      _listenForProximity();
     }
   }
 
   void _listenForFaceDown() {
     _accelerometerSubscription = accelerometerEventStream().listen((event) {
+      final wasFaceDown = _isFaceDown;
       _isFaceDown = event.z < _faceDownThreshold;
+      if (_isFaceDown && !wasFaceDown) {
+        _scheduleProximityFallback();
+      } else if (!_isFaceDown) {
+        _proximityFallbackTimer?.cancel();
+      }
       _checkGyroscopeReady();
     });
   }
@@ -59,6 +83,19 @@ class _TurnPhoneReadyViewState extends State<TurnPhoneReadyView> {
   void _listenForProximity() {
     _proximitySubscription = ProximitySensor.events.listen((event) {
       _isNear = event > 0;
+      _checkGyroscopeReady();
+    });
+  }
+
+  // The proximity sensor only reports state *transitions*: if the phone is
+  // already face down (sensor covered) before the listener registers, no
+  // event ever arrives. Assume "near" after a short delay so the screen
+  // doesn't get stuck waiting for an event that will never come.
+  void _scheduleProximityFallback() {
+    _proximityFallbackTimer?.cancel();
+    _proximityFallbackTimer = Timer(_proximityFallbackDelay, () {
+      if (!_isFaceDown || _isNear) return;
+      _isNear = true;
       _checkGyroscopeReady();
     });
   }
@@ -86,14 +123,17 @@ class _TurnPhoneReadyViewState extends State<TurnPhoneReadyView> {
     _accelerometerSubscription?.cancel();
     _proximitySubscription?.cancel();
     _countdownTimer?.cancel();
+    _proximityFallbackTimer?.cancel();
     widget.onReady();
   }
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _accelerometerSubscription?.cancel();
     _proximitySubscription?.cancel();
     _countdownTimer?.cancel();
+    _proximityFallbackTimer?.cancel();
     super.dispose();
   }
 
