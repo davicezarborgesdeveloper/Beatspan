@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 
+import '../../../app/di.dart';
+import '../../../data/network/spotify_service.dart';
+import '../../../data/network/spotify_webapi.dart';
 import '../../share/widgets/beatspan_loading_overlay.dart';
 
 class PlayerMusicFreeView extends StatefulWidget {
+  final String? trackId; // ID da faixa no Spotify
   final String previewUrl; // URL de 30s
   final String? trackName;
   final String? artistName;
@@ -11,6 +15,7 @@ class PlayerMusicFreeView extends StatefulWidget {
 
   const PlayerMusicFreeView({
     super.key,
+    this.trackId,
     required this.previewUrl,
     this.trackName,
     this.artistName,
@@ -26,6 +31,9 @@ class _PlayerMusicFreeViewState extends State<PlayerMusicFreeView> {
 
   bool _isLoading = true;
   String? _error;
+
+  bool _isSavingTrack = false;
+  bool _isTrackSaved = false;
 
   static const _purple = Color(0xFF6C2BFF);
   static const _pink = Color(0xFFE84BC7);
@@ -54,6 +62,39 @@ class _PlayerMusicFreeViewState extends State<PlayerMusicFreeView> {
   void dispose() {
     _player.dispose();
     super.dispose();
+  }
+
+  Future<void> _saveToSpotify() async {
+    final trackId = widget.trackId;
+    if (trackId == null || _isSavingTrack || _isTrackSaved) return;
+
+    setState(() => _isSavingTrack = true);
+    try {
+      final spotifyService = instance<SpotifyService>();
+      final token = await spotifyService.getAccessToken();
+      final api = SpotifyWebApi(token);
+      final saved = await api.saveTrack(trackId);
+
+      if (!mounted) return;
+      setState(() => _isTrackSaved = saved);
+
+      if (!saved) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Não foi possível salvar a faixa no Spotify.'),
+          ),
+        );
+      }
+    } catch (_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Não foi possível salvar a faixa no Spotify.'),
+        ),
+      );
+    } finally {
+      if (mounted) setState(() => _isSavingTrack = false);
+    }
   }
 
   @override
@@ -121,7 +162,7 @@ class _PlayerMusicFreeViewState extends State<PlayerMusicFreeView> {
               ),
             ),
           ),
-          Spacer(),
+          SizedBox(height: 32),
           Container(
             padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
@@ -145,18 +186,38 @@ class _PlayerMusicFreeViewState extends State<PlayerMusicFreeView> {
               children: [
                 _albumArt(),
                 SizedBox(height: 24),
-                Text(widget.trackName ?? '',style:TextStyle(fontSize:16,color:Color(0XFFF8F7FC))),
+                Text(
+                  widget.trackName ?? '',
+                  style: TextStyle(fontSize: 16, color: Color(0XFFF8F7FC)),
+                ),
+                SizedBox(height: 4),
                 Row(
                   children: [
-                    Text(widget.artistName ?? '',style:TextStyle(fontSize:18,color:Color(0XFFA9A2B5))),
-                  SizedBox(width: 8),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                    decoration:BoxDecoration(
-                      color:Color(0XFF06B6D4).withValues(alpha:0.1),
-                      border:Border.all(color:Color(0XFF06B6D4).withValues(alpha:0.2)),
-                      borderRadius:BorderRadius.circular(20)
-                    ),child:Text('PRÉVIA',style:TextStyle(color: Color(0XFF06B6D4),fontWeight:FontWeight.w800)))
+                    Text(
+                      widget.artistName ?? '',
+                      style: TextStyle(fontSize: 18, color: Color(0XFFA9A2B5)),
+                    ),
+                    SizedBox(width: 8),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 2,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Color(0XFF06B6D4).withValues(alpha: 0.1),
+                        border: Border.all(
+                          color: Color(0XFF06B6D4).withValues(alpha: 0.2),
+                        ),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Text(
+                        'PRÉVIA',
+                        style: TextStyle(
+                          color: Color(0XFF06B6D4),
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
                 _playButton(),
@@ -279,25 +340,78 @@ class _PlayerMusicFreeViewState extends State<PlayerMusicFreeView> {
         final state = snapshot.data;
         final playing = state?.playing ?? false;
 
-        return GestureDetector(
-          onTap: () => playing ? _player.pause() : _player.play(),
-          child: Container(
-            width: 76,
-            height: 76,
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              gradient: LinearGradient(
-                colors: [_purple, _pink],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            GestureDetector(
+              onTap: widget.trackId == null ? null : _saveToSpotify,
+              child: Row(
+                children: [
+                  _isSavingTrack
+                      ? const SizedBox(
+                          width: 18,
+                          height: 18,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: Colors.white,
+                          ),
+                        )
+                      : Icon(
+                          _isTrackSaved
+                              ? Icons.check_circle
+                              : Icons.add_circle_outline,
+                          color: Colors.white,
+                          size: 18,
+                        ),
+                  const SizedBox(width: 8),
+                  Text(
+                    _isTrackSaved ? 'SALVO NO SPOTIFY' : 'SALVAR NO SPOTIFY',
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
               ),
             ),
-            child: Icon(
-              playing ? Icons.pause : Icons.play_arrow,
-              color: Colors.white,
-              size: 40,
+            GestureDetector(
+              onTap: () => playing ? _player.pause() : _player.play(),
+              child: Container(
+                width: 56,
+                height: 56,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.white,
+                ),
+                child: Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white.withValues(alpha: 0.02),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.1),
+                        blurRadius: 15,
+                        spreadRadius: -3,
+                        offset: const Offset(0, 10),
+                      ),
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.1),
+                        blurRadius: 6,
+                        spreadRadius: -4,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: Icon(
+                    playing ? Icons.pause : Icons.play_arrow,
+                    color: Color(0XFF110B1A),
+                    size: 20,
+                  ),
+                ),
+              ),
             ),
-          ),
+          ],
         );
       },
     );

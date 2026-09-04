@@ -45,8 +45,7 @@ class _GameViewState extends State<GameView> {
 
     _isHandlingCode = true;
 
-    // final navigator = Navigator.of(context);
-    // await qrController.stop();
+    await qrController.stop();
     if (!mounted) return;
 
     setState(() => _isLoading = true);
@@ -63,7 +62,7 @@ class _GameViewState extends State<GameView> {
       if (mounted) {
         _isHandlingCode = false;
         setState(() => _isLoading = false);
-        // await qrController.start();
+        await qrController.start();
       }
     }
   }
@@ -127,6 +126,7 @@ class _GameViewState extends State<GameView> {
     if (!mounted) return;
     await _navigateToPlayer(
       PlayerMusicFreeView(
+        trackId: trackId,
         previewUrl: previewUrl,
         trackName: trackName,
         artistName: artistName,

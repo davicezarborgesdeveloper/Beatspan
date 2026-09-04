@@ -10,7 +10,7 @@ class SpotifyService {
     required this.clientId,
     required this.redirectUrl,
     this.scopes =
-        'app-remote-control,user-read-playback-state,user-modify-playback-state,playlist-read-private',
+        'app-remote-control,user-read-playback-state,user-modify-playback-state,playlist-read-private,user-library-modify,user-library-read',
   });
 
   Future<bool> connect({String? accessToken}) async {
